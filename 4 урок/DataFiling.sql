@@ -1739,14 +1739,12 @@ INSERT INTO `profiles` (`user_id`, `gender`, `birthday`, `photo_id`, `home_town`
 INSERT INTO `profiles` (`user_id`, `gender`, `birthday`, `photo_id`, `home_town`, `created_at`) VALUES ('99', NULL, '1988-12-28', '99', NULL, '2007-08-24 23:02:54');
 INSERT INTO `profiles` (`user_id`, `gender`, `birthday`, `photo_id`, `home_town`, `created_at`) VALUES ('100', NULL, '1993-06-08', '100', NULL, '1978-08-23 03:55:25');
 
--- truncate TABLE communities;
 INSERT INTO vk.communities (admin_user_id, name) VALUES(5, 'Community01');
 INSERT INTO vk.communities (admin_user_id, name) VALUES(57, 'Community02');
 INSERT INTO vk.communities (admin_user_id, name) VALUES(25, 'Community03');
 INSERT INTO vk.communities (admin_user_id, name) VALUES(59, 'Community04');
 INSERT INTO vk.communities (admin_user_id, name) VALUES(68, 'Community05');
 
--- truncate TABLE users_communities;
 INSERT INTO `users_communities` (`user_id`, `community_id`) VALUES ('1', '1');
 INSERT INTO `users_communities` (`user_id`, `community_id`) VALUES ('2', '2');
 INSERT INTO `users_communities` (`user_id`, `community_id`) VALUES ('3', '3');
