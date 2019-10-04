@@ -77,7 +77,7 @@ CREATE TABLE products(
 	id serial,
 	name VARCHAR(255) comment 'Название раздела',
 	description TEXT comment 'Описание',
-	prise DECIMAL(11,2) comment 'Цена',
+	price DECIMAL(11,2) comment 'Цена',
 	catalog_id INT UNSIGNED,
 	created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
@@ -154,15 +154,3 @@ CREATE TABLE storehouses_products(
     
     PRIMARY KEY(id)
 ) comment = 'Запасы на складе';
-
-
-
-
-
-
-
-
-
-
-
-
