@@ -53,6 +53,7 @@ SELECT * FROM users WHERE birthday_at LIKE '199%';
 SELECT * FROM catalogs ORDER BY name;
 SELECT * FROM catalogs ORDER BY name DESC;
 
+truncate products;
 INSERT INTO products(name, description, price, catalog_id) VALUES
     ('Intel Core i3-8100', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 7890.00, 1),
     ('Intel Core i5-7400', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 12700.00, 1),
@@ -63,10 +64,32 @@ INSERT INTO products(name, description, price, catalog_id) VALUES
     ('MSI B250M GAMING PRO', 'Материнская плата MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 5060.00, 2);
 
 SELECT * FROM products;
+SELECT id, catalog_id, price, name FROM products;
+SELECT id, catalog_id, price, name FROM products ORDER BY catalog_id, price;
+SELECT id, catalog_id, price, name FROM products ORDER BY catalog_id, price DESC;
+SELECT id, catalog_id, price, name FROM products ORDER BY catalog_id DESC, price DESC;
+SELECT id, catalog_id, price, name FROM products LIMIT 2;
+SELECT id, catalog_id, price, name FROM products LIMIT 2, 2;
+SELECT id, catalog_id, price, name FROM products LIMIT 4, 2;
+SELECT id, catalog_id, price, name FROM products LIMIT 2 offset 4;
 
+SELECT catalog_id FROM products ORDER BY catalog_id;
+SELECT DISTINCT catalog_id FROM products ORDER BY catalog_id;
+SELECT ALL catalog_id FROM products ORDER BY catalog_id; -- ключевое слово "ALL" опускается, т.к. данный запрос равносилен запросу по-умолчанию
 
+/*Задание - уменьшить на 10% цену материнских плат, цена которых превышает 5000р.*/
 
+SELECT id, catalog_id, price, name FROM products WHERE catalog_id = 2 AND price > 5000;
+UPDATE products
+    SET price = price * 0.9
+    WHERE catalog_id = 2 AND price > 5000;
+SELECT id, catalog_id, price, name FROM products;
 
+/*Задание - Удалить две самые дорогие позиции в таблице "products"*/
+
+SELECT id, catalog_id, price, name FROM products ORDER BY price DESC LIMIT 2;
+DELETE FROM products ORDER BY price DESC LIMIT 2;
+SELECT id, catalog_id, price, name FROM products;
 
 
 
