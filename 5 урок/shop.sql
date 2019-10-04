@@ -6,32 +6,32 @@ USE shop;
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs(
 	id serial,
-	name VARCHAR(255) comment 'Название раздела',
+	name VARCHAR(255) comment 'РќР°Р·РІР°РЅРёРµ СЂР°Р·РґРµР»Р°',
 	
 	PRIMARY KEY(id),
 	UNIQUE unique_name(name(10))
-) comment = 'Разделы интернет-магазина';
+) comment = 'Р Р°Р·РґРµР»С‹ РёРЅС‚РµСЂРЅРµС‚-РјР°РіР°Р·РёРЅР°';
 
-/* INSERT INTO catalogs VALUES (DEFAULT, 'Процессоры');
- INSERT INTO catalogs VALUES (DEFAULT, 'Мат. платы');
- INSERT INTO catalogs VALUES (DEFAULT, 'Видеокарты');
+/* INSERT INTO catalogs VALUES (DEFAULT, 'РџСЂРѕС†РµСЃСЃРѕСЂС‹');
+ INSERT INTO catalogs VALUES (DEFAULT, 'РњР°С‚. РїР»Р°С‚С‹');
+ INSERT INTO catalogs VALUES (DEFAULT, 'Р’РёРґРµРѕРєР°СЂС‚С‹');
  
  INSERT INTO catalogs VALUES
-     (DEFAULT, 'Процессоры'),
-     (DEFAULT, 'Мат. платы'),
-     (DEFAULT, 'Видеокарты');*/
+     (DEFAULT, 'РџСЂРѕС†РµСЃСЃРѕСЂС‹'),
+     (DEFAULT, 'РњР°С‚. РїР»Р°С‚С‹'),
+     (DEFAULT, 'Р’РёРґРµРѕРєР°СЂС‚С‹');*/
  
 
 INSERT INTO catalogs (name) VALUES
-    ('Процессоры'),
-    ('Мат. платы'),
-    ('Видеокарты');
+    ('РџСЂРѕС†РµСЃСЃРѕСЂС‹'),
+    ('РњР°С‚. РїР»Р°С‚С‹'),
+    ('Р’РёРґРµРѕРєР°СЂС‚С‹');
 
 /*INSERT IGNORE INTO catalogs (name) VALUES
-    ('Процессоры'),
-    ('Мат. платы'),
-    ('Видеокарты'),
-    ('Видеокарты');*/
+    ('РџСЂРѕС†РµСЃСЃРѕСЂС‹'),
+    ('РњР°С‚. РїР»Р°С‚С‹'),
+    ('Р’РёРґРµРѕРєР°СЂС‚С‹'),
+    ('Р’РёРґРµРѕРєР°СЂС‚С‹');*/
 
 -- SELECT id, name FROM catalogs;
 -- SELECT * FROM catalogs;
@@ -43,19 +43,19 @@ INSERT INTO catalogs (name) VALUES
 -- truncate catalogs;
 
 UPDATE catalogs
-    SET name = 'Процессоры (Intel)'
-    WHERE name = 'Процессоры';
+    SET name = 'РџСЂРѕС†РµСЃСЃРѕСЂС‹ (Intel)'
+    WHERE name = 'РџСЂРѕС†РµСЃСЃРѕСЂС‹';
 
 /*DROP TABLE IF EXISTS cat;
 CREATE TABLE cat(
     id serial,
-    name VARCHAR(255) comment 'Название раздела',
+    name VARCHAR(255) comment 'РќР°Р·РІР°РЅРёРµ СЂР°Р·РґРµР»Р°',
     
     PRIMARY KEY(id),
     UNIQUE unique_name(name(10))
-) comment = 'Копия таблицы "catalogs"';
+) comment = 'РљРѕРїРёСЏ С‚Р°Р±Р»РёС†С‹ "catalogs"';
 
-INSERT cat -- ключевое слово "INTO" - опционально
+INSERT cat -- РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ "INTO" - РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ
     SELECT *
     FROM catalogs;
 
@@ -64,32 +64,32 @@ SELECT * FROM cat;*/
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
 	id serial,
-	name VARCHAR(255) comment 'Имя покупателя',
-	birthday_at DATE comment 'Дата рождения',
+	name VARCHAR(255) comment 'РРјСЏ РїРѕРєСѓРїР°С‚РµР»СЏ',
+	birthday_at DATE comment 'Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ',
 	created_at DATETIME DEFAULT current_timestamp,
 	updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
 	
 	PRIMARY KEY(id)
-) comment = 'Покупатели';
+) comment = 'РџРѕРєСѓРїР°С‚РµР»Рё';
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE products(
 	id serial,
-	name VARCHAR(255) comment 'Название раздела',
-	description TEXT comment 'Описание',
-	price DECIMAL(11,2) comment 'Цена',
+	name VARCHAR(255) comment 'РќР°Р·РІР°РЅРёРµ СЂР°Р·РґРµР»Р°',
+	description TEXT comment 'РћРїРёСЃР°РЅРёРµ',
+	price DECIMAL(11,2) comment 'Р¦РµРЅР°',
 	catalog_id INT UNSIGNED,
 	created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     
     PRIMARY KEY(id),
     KEY index_of_catalog_id(catalog_id)
-) comment = 'Товарные позиции';
+) comment = 'РўРѕРІР°СЂРЅС‹Рµ РїРѕР·РёС†РёРё';
 
 -- CREATE INDEX index_of_catalog_id ON products(catalog_id);
-/* Мы можем явно указать тип индекса при помощи ключевого слова "USING" */
+/* РњС‹ РјРѕР¶РµРј СЏРІРЅРѕ СѓРєР°Р·Р°С‚СЊ С‚РёРї РёРЅРґРµРєСЃР° РїСЂРё РїРѕРјРѕС‰Рё РєР»СЋС‡РµРІРѕРіРѕ СЃР»РѕРІР° "USING" */
 -- CREATE INDEX index_of_catalog_id USING BTREE ON products(catalog_id);
-/* где BTREE это бинарное дерево. Также есть HASH-индексы. */
+/* РіРґРµ BTREE СЌС‚Рѕ Р±РёРЅР°СЂРЅРѕРµ РґРµСЂРµРІРѕ. РўР°РєР¶Рµ РµСЃС‚СЊ HASH-РёРЅРґРµРєСЃС‹. */
 -- DROP INDEX index_of_catalog_id ON products;
 
 DROP TABLE IF EXISTS orders;
@@ -101,28 +101,28 @@ CREATE TABLE orders(
     
     PRIMARY KEY(id),
     KEY index_of_user_id(user_id)
-) comment = 'Заказы';
+) comment = 'Р—Р°РєР°Р·С‹';
 
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products(
 	id serial,
 	order_id INT UNSIGNED,
 	product_id INT UNSIGNED,
-	total INT UNSIGNED DEFAULT 1 comment 'Количество заказанных товарных позиций',
+	total INT UNSIGNED DEFAULT 1 comment 'РљРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РєР°Р·Р°РЅРЅС‹С… С‚РѕРІР°СЂРЅС‹С… РїРѕР·РёС†РёР№',
 	created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     
     PRIMARY KEY(id)
 --     KEY index_of_order_id(order_id, product_id),
 --     KEY index_of_product_id(product_id, order_id)
-) comment = 'Состав заказа';
+) comment = 'РЎРѕСЃС‚Р°РІ Р·Р°РєР°Р·Р°';
 
 DROP TABLE IF EXISTS discounts;
 CREATE TABLE discounts(
 	id serial,
 	user_id INT UNSIGNED,
 	product_id INT UNSIGNED,
-	discount FLOAT UNSIGNED comment 'Величина скидки от 0.0 до 1.0',
+	discount FLOAT UNSIGNED comment 'Р’РµР»РёС‡РёРЅР° СЃРєРёРґРєРё РѕС‚ 0.0 РґРѕ 1.0',
 	started_at DATETIME,
 	finished_at DATETIME,
 	created_at DATETIME DEFAULT current_timestamp,
@@ -131,26 +131,26 @@ CREATE TABLE discounts(
     PRIMARY KEY(id),
     KEY index_of_user_id(user_id),
     KEY index_of_product_id(product_id)
-) comment = 'Скидки';
+) comment = 'РЎРєРёРґРєРё';
 
 DROP TABLE IF EXISTS storehouses;
 CREATE TABLE storehouses(
     id serial,
-    name varchar(255) comment 'Название',
+    name varchar(255) comment 'РќР°Р·РІР°РЅРёРµ',
     created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     
     PRIMARY KEY(id)
-) comment = 'Склады';
+) comment = 'РЎРєР»Р°РґС‹';
 
 DROP TABLE IF EXISTS storehouses_products;
 CREATE TABLE storehouses_products(
 	id serial,
 	storehouse_id INT UNSIGNED,
 	product_id INT UNSIGNED,
-	value INT UNSIGNED comment 'Запас товарной позиции на складе',
+	value INT UNSIGNED comment 'Р—Р°РїР°СЃ С‚РѕРІР°СЂРЅРѕР№ РїРѕР·РёС†РёРё РЅР° СЃРєР»Р°РґРµ',
 	created_at DATETIME DEFAULT current_timestamp,
     updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     
     PRIMARY KEY(id)
-) comment = 'Запасы на складе';
+) comment = 'Р—Р°РїР°СЃС‹ РЅР° СЃРєР»Р°РґРµ';
