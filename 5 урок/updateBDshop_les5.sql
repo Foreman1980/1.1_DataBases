@@ -3,12 +3,12 @@ USE shop;
 DROP TABLE IF EXISTS cat;
 
 INSERT INTO catalogs (name) VALUES
-    ('Жесткие диски'),
-    ('Оперативная память');
+    ('Р–РµСЃС‚РєРёРµ РґРёСЃРєРё'),
+    ('РћРїРµСЂР°С‚РёРІРЅР°СЏ РїР°РјСЏС‚СЊ');
 
 UPDATE catalogs
-    SET name = 'Материнские платы'
-    WHERE name = 'Мат. платы';
+    SET name = 'РњР°С‚РµСЂРёРЅСЃРєРёРµ РїР»Р°С‚С‹'
+    WHERE name = 'РњР°С‚. РїР»Р°С‚С‹';
     
 SHOW DATABASES;
 SHOW tables;
@@ -33,19 +33,19 @@ SELECT * FROM catalogs;
 SELECT * FROM catalogs WHERE id > 2;
 SELECT * FROM catalogs WHERE id IN (1, 2, 5);
 SELECT * FROM catalogs WHERE id NOT IN (1, 2, 5);
-SELECT * FROM catalogs WHERE name = 'Процессоры';
-SELECT * FROM catalogs WHERE name LIKE 'Процессоры';
-SELECT * FROM catalogs WHERE name LIKE '%ы';
-SELECT * FROM catalogs WHERE name NOT LIKE '%ы';
+SELECT * FROM catalogs WHERE name = 'РџСЂРѕС†РµСЃСЃРѕСЂС‹';
+SELECT * FROM catalogs WHERE name LIKE 'РџСЂРѕС†РµСЃСЃРѕСЂС‹';
+SELECT * FROM catalogs WHERE name LIKE '%С‹';
+SELECT * FROM catalogs WHERE name NOT LIKE '%С‹';
 
 truncate users;
 INSERT INTO users (name, birthday_at) VALUES
-    ('Геннадий', '1990-10-05'),
-    ('Наталья', '1984-11-12'),
-    ('Александр', '1985-05-20'),
-    ('Сергей', '1988-02-14'),
-    ('Иван', '1998-01-12'),
-    ('Мария', '1992-08-29');
+    ('Р“РµРЅРЅР°РґРёР№', '1990-10-05'),
+    ('РќР°С‚Р°Р»СЊСЏ', '1984-11-12'),
+    ('РђР»РµРєСЃР°РЅРґСЂ', '1985-05-20'),
+    ('РЎРµСЂРіРµР№', '1988-02-14'),
+    ('РРІР°РЅ', '1998-01-12'),
+    ('РњР°СЂРёСЏ', '1992-08-29');
     
 SELECT * FROM users WHERE birthday_at >= '1990-01-01' AND birthday_at < '2000-01-01';
 SELECT * FROM users WHERE birthday_at BETWEEN '1990-01-01' AND '2000-01-01';
@@ -56,13 +56,13 @@ SELECT * FROM catalogs ORDER BY name DESC;
 
 truncate products;
 INSERT INTO products(name, description, price, catalog_id) VALUES
-    ('Intel Core i3-8100', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 7890.00, 1),
-    ('Intel Core i5-7400', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 12700.00, 1),
-    ('AMD FX-8320E', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 4780.00, 1),
-    ('AMD FX-8320', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 7120.00, 1),
-    ('ASUS ROG MAXIMUS X HERO', 'Материнская плата ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX', 19310.00, 2),
-    ('Gigabyte H310M S2H', 'Материнская плата Gigabyte H310M S2H, H310, Socket 1151-V2, DDR4, mATX', 4790.00, 2),
-    ('MSI B250M GAMING PRO', 'Материнская плата MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 5060.00, 2);
+    ('Intel Core i3-8100', 'РџСЂРѕС†РµСЃСЃРѕСЂ РґР»СЏ РЅР°СЃС‚РѕР»СЊРЅС‹С… РїРµСЂСЃРѕРЅР°Р»СЊРЅС‹С… РєРѕРјРїСЊСЋС‚РµСЂРѕРІ, РѕСЃРЅРѕРІР°РЅРЅС‹С… РЅР° РїР»Р°С‚С„РѕСЂРјРµ Intel.', 7890.00, 1),
+    ('Intel Core i5-7400', 'РџСЂРѕС†РµСЃСЃРѕСЂ РґР»СЏ РЅР°СЃС‚РѕР»СЊРЅС‹С… РїРµСЂСЃРѕРЅР°Р»СЊРЅС‹С… РєРѕРјРїСЊСЋС‚РµСЂРѕРІ, РѕСЃРЅРѕРІР°РЅРЅС‹С… РЅР° РїР»Р°С‚С„РѕСЂРјРµ Intel.', 12700.00, 1),
+    ('AMD FX-8320E', 'РџСЂРѕС†РµСЃСЃРѕСЂ РґР»СЏ РЅР°СЃС‚РѕР»СЊРЅС‹С… РїРµСЂСЃРѕРЅР°Р»СЊРЅС‹С… РєРѕРјРїСЊСЋС‚РµСЂРѕРІ, РѕСЃРЅРѕРІР°РЅРЅС‹С… РЅР° РїР»Р°С‚С„РѕСЂРјРµ AMD.', 4780.00, 1),
+    ('AMD FX-8320', 'РџСЂРѕС†РµСЃСЃРѕСЂ РґР»СЏ РЅР°СЃС‚РѕР»СЊРЅС‹С… РїРµСЂСЃРѕРЅР°Р»СЊРЅС‹С… РєРѕРјРїСЊСЋС‚РµСЂРѕРІ, РѕСЃРЅРѕРІР°РЅРЅС‹С… РЅР° РїР»Р°С‚С„РѕСЂРјРµ AMD.', 7120.00, 1),
+    ('ASUS ROG MAXIMUS X HERO', 'РњР°С‚РµСЂРёРЅСЃРєР°СЏ РїР»Р°С‚Р° ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX', 19310.00, 2),
+    ('Gigabyte H310M S2H', 'РњР°С‚РµСЂРёРЅСЃРєР°СЏ РїР»Р°С‚Р° Gigabyte H310M S2H, H310, Socket 1151-V2, DDR4, mATX', 4790.00, 2),
+    ('MSI B250M GAMING PRO', 'РњР°С‚РµСЂРёРЅСЃРєР°СЏ РїР»Р°С‚Р° MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 5060.00, 2);
 
 SELECT * FROM products;
 SELECT id, catalog_id, price, name FROM products;
@@ -76,9 +76,9 @@ SELECT id, catalog_id, price, name FROM products LIMIT 2 offset 4;
 
 SELECT catalog_id FROM products ORDER BY catalog_id;
 SELECT DISTINCT catalog_id FROM products ORDER BY catalog_id;
-SELECT ALL catalog_id FROM products ORDER BY catalog_id; -- ключевое слово "ALL" опускается, т.к. данный запрос равносилен запросу по-умолчанию
+SELECT ALL catalog_id FROM products ORDER BY catalog_id; -- РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ "ALL" РѕРїСѓСЃРєР°РµС‚СЃСЏ, С‚.Рє. РґР°РЅРЅС‹Р№ Р·Р°РїСЂРѕСЃ СЂР°РІРЅРѕСЃРёР»РµРЅ Р·Р°РїСЂРѕСЃСѓ РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ
 
-/*Задание - уменьшить на 10% цену материнских плат, цена которых превышает 5000р.*/
+/*Р—Р°РґР°РЅРёРµ - СѓРјРµРЅСЊС€РёС‚СЊ РЅР° 10% С†РµРЅСѓ РјР°С‚РµСЂРёРЅСЃРєРёС… РїР»Р°С‚, С†РµРЅР° РєРѕС‚РѕСЂС‹С… РїСЂРµРІС‹С€Р°РµС‚ 5000СЂ.*/
 
 SELECT id, catalog_id, price, name FROM products WHERE catalog_id = 2 AND price > 5000;
 UPDATE products
@@ -86,7 +86,7 @@ UPDATE products
     WHERE catalog_id = 2 AND price > 5000;
 SELECT id, catalog_id, price, name FROM products;
 
-/*Задание - Удалить две самые дорогие позиции в таблице "products"*/
+/*Р—Р°РґР°РЅРёРµ - РЈРґР°Р»РёС‚СЊ РґРІРµ СЃР°РјС‹Рµ РґРѕСЂРѕРіРёРµ РїРѕР·РёС†РёРё РІ С‚Р°Р±Р»РёС†Рµ "products"*/
 
 SELECT id, catalog_id, price, name FROM products ORDER BY price DESC LIMIT 2;
 DELETE FROM products ORDER BY price DESC LIMIT 2;
@@ -95,47 +95,45 @@ SELECT id, catalog_id, price, name FROM products;
 SELECT date('2018-10-10 15:20:00');
 SELECT now();
 
-INSERT INTO users VALUES (NULL, 'Александр', '1986-01-20', now(), now());
+INSERT INTO users VALUES (NULL, 'РђР»РµРєСЃР°РЅРґСЂ', '1986-01-20', now(), now());
 SELECT * FROM users;
-SELECT name, created_at, updated_at FROM users WHERE name = 'Александр';
-SELECT name, date(created_at), date(updated_at) FROM users WHERE name = 'Александр';
-SELECT name, date(created_at) AS created_at, date(updated_at) AS updated_at FROM users WHERE name = 'Александр';
-/*Допускается не указывать ключевое слово "AS" заменяя его пробелом.*/
-SELECT name, date(created_at) created_at, date(updated_at) updated_at FROM users WHERE name = 'Александр';
+SELECT name, created_at, updated_at FROM users WHERE name = 'РђР»РµРєСЃР°РЅРґСЂ';
+SELECT name, date(created_at), date(updated_at) FROM users WHERE name = 'РђР»РµРєСЃР°РЅРґСЂ';
+SELECT name, date(created_at) AS created_at, date(updated_at) AS updated_at FROM users WHERE name = 'РђР»РµРєСЃР°РЅРґСЂ';
+/*Р”РѕРїСѓСЃРєР°РµС‚СЃСЏ РЅРµ СѓРєР°Р·С‹РІР°С‚СЊ РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ "AS" Р·Р°РјРµРЅСЏСЏ РµРіРѕ РїСЂРѕР±РµР»РѕРј.*/
+SELECT name, date(created_at) created_at, date(updated_at) updated_at FROM users WHERE name = 'РђР»РµРєСЃР°РЅРґСЂ';
 
-SELECT date_format('2018-06-12 01:59:59', 'На дворе %Y год.'); -- последовательность %Y отвечает за извлечение года из календарного значения
-SELECT date_format(now(), 'На дворе %Y год.');
+SELECT date_format('2018-06-12 01:59:59', 'РќР° РґРІРѕСЂРµ %Y РіРѕРґ.'); -- РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ %Y РѕС‚РІРµС‡Р°РµС‚ Р·Р° РёР·РІР»РµС‡РµРЅРёРµ РіРѕРґР° РёР· РєР°Р»РµРЅРґР°СЂРЅРѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ
+SELECT date_format(now(), 'РќР° РґРІРѕСЂРµ %Y РіРѕРґ.');
 
 SELECT name, date_format(birthday_at, '%d.%m.%Y') birthday FROM users;
 
-/*Преобразование даты и времени в "UNIXSTAMP"-формат (это количество секунд, которое прошло с полуночи 01.01.1970. Ограничение до 31.12.2037 23:59:59).
+/*РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РґР°С‚С‹ Рё РІСЂРµРјРµРЅРё РІ "UNIXSTAMP"-С„РѕСЂРјР°С‚ (СЌС‚Рѕ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРµРєСѓРЅРґ, РєРѕС‚РѕСЂРѕРµ РїСЂРѕС€Р»Рѕ СЃ РїРѕР»СѓРЅРѕС‡Рё 01.01.1970. РћРіСЂР°РЅРёС‡РµРЅРёРµ РґРѕ 31.12.2037 23:59:59).
  * DATETIME - 8 bytes
  * UNIXSTAMP - 4 bytes
  * UNIX_TIMESTAMP(DATETIME) = UNIXSTAMP
  * FROM_UNIXTIME(UNIXSTAMP) = DATETIME*/
 SELECT unix_timestamp(now()) TIMESTAMP, from_unixtime(1570205067) DATETIME;
 
-/*Задание - По полю "birthday_at" вычислить текущий возраст пользователя из таблицы "users"*/
+/*Р—Р°РґР°РЅРёРµ - РџРѕ РїРѕР»СЋ "birthday_at" РІС‹С‡РёСЃР»РёС‚СЊ С‚РµРєСѓС‰РёР№ РІРѕР·СЂР°СЃС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РёР· С‚Р°Р±Р»РёС†С‹ "users"*/
 
 SELECT * FROM users;
 SELECT name, (to_days(now()) - to_days(birthday_at)) / 365.25 AS age FROM users;
 SELECT name, floor((to_days(now()) - to_days(birthday_at)) / 365.25) AS age FROM users;
 SELECT name, timestampdiff(YEAR, birthday_at, now()) AS age FROM users;
 
-SELECT * FROM users ORDER BY rand(); -- вывод полей таблицы в случайном порядке
-SELECT * FROM users ORDER BY rand() LIMIT 1; -- вывод одной случайной записи
+SELECT * FROM users ORDER BY rand(); -- РІС‹РІРѕРґ РїРѕР»РµР№ С‚Р°Р±Р»РёС†С‹ РІ СЃР»СѓС‡Р°Р№РЅРѕРј РїРѕСЂСЏРґРєРµ
+SELECT * FROM users ORDER BY rand() LIMIT 1; -- РІС‹РІРѕРґ РѕРґРЅРѕР№ СЃР»СѓС‡Р°Р№РЅРѕР№ Р·Р°РїРёСЃРё
 
-/*Информационные функции:
- * SELECT VERSION() - возвращает текущую версию MySQL сервера
- * SELECT LAST_INSERT_ID() - возвращает текущее значение счётчика в столбце "AUTO_INCREMENT"...не совсем понятно...
- * SELECT DATABASE() - возврвщает текущую БД, если БД не выбрана, функция возвращает NULL
- * SELECT USER() - возвращает текущего пользователя - root@localhost*/
+/*РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Рµ С„СѓРЅРєС†РёРё:
+ * SELECT VERSION() - РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰СѓСЋ РІРµСЂСЃРёСЋ MySQL СЃРµСЂРІРµСЂР°
+ * SELECT LAST_INSERT_ID() - РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РµРµ Р·РЅР°С‡РµРЅРёРµ СЃС‡С‘С‚С‡РёРєР° РІ СЃС‚РѕР»Р±С†Рµ "AUTO_INCREMENT"...РЅРµ СЃРѕРІСЃРµРј РїРѕРЅСЏС‚РЅРѕ...
+ * SELECT DATABASE() - РІРѕР·РІСЂРІС‰Р°РµС‚ С‚РµРєСѓС‰СѓСЋ Р‘Р”, РµСЃР»Рё Р‘Р” РЅРµ РІС‹Р±СЂР°РЅР°, С„СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ NULL
+ * SELECT USER() - РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ - root@localhost*/
 SELECT VERSION();
 SELECT LAST_INSERT_ID();
 SELECT DATABASE();
 SELECT USER();
-
-
 
 
 
