@@ -38,6 +38,7 @@ SELECT * FROM catalogs WHERE name LIKE 'Процессоры';
 SELECT * FROM catalogs WHERE name LIKE '%ы';
 SELECT * FROM catalogs WHERE name NOT LIKE '%ы';
 
+truncate users;
 INSERT INTO users (name, birthday_at) VALUES
     ('Геннадий', '1990-10-05'),
     ('Наталья', '1984-11-12'),
@@ -90,6 +91,51 @@ SELECT id, catalog_id, price, name FROM products;
 SELECT id, catalog_id, price, name FROM products ORDER BY price DESC LIMIT 2;
 DELETE FROM products ORDER BY price DESC LIMIT 2;
 SELECT id, catalog_id, price, name FROM products;
+
+SELECT date('2018-10-10 15:20:00');
+SELECT now();
+
+INSERT INTO users VALUES (NULL, 'Александр', '1986-01-20', now(), now());
+SELECT * FROM users;
+SELECT name, created_at, updated_at FROM users WHERE name = 'Александр';
+SELECT name, date(created_at), date(updated_at) FROM users WHERE name = 'Александр';
+SELECT name, date(created_at) AS created_at, date(updated_at) AS updated_at FROM users WHERE name = 'Александр';
+/*Допускается не указывать ключевое слово "AS" заменяя его пробелом.*/
+SELECT name, date(created_at) created_at, date(updated_at) updated_at FROM users WHERE name = 'Александр';
+
+SELECT date_format('2018-06-12 01:59:59', 'На дворе %Y год.'); -- последовательность %Y отвечает за извлечение года из календарного значения
+SELECT date_format(now(), 'На дворе %Y год.');
+
+SELECT name, date_format(birthday_at, '%d.%m.%Y') birthday FROM users;
+
+/*Преобразование даты и времени в "UNIXSTAMP"-формат (это количество секунд, которое прошло с полуночи 01.01.1970. Ограничение до 31.12.2037 23:59:59).
+ * DATETIME - 8 bytes
+ * UNIXSTAMP - 4 bytes
+ * UNIX_TIMESTAMP(DATETIME) = UNIXSTAMP
+ * FROM_UNIXTIME(UNIXSTAMP) = DATETIME*/
+SELECT unix_timestamp(now()) TIMESTAMP, from_unixtime(1570205067) DATETIME;
+
+/*Задание - По полю "birthday_at" вычислить текущий возраст пользователя из таблицы "users"*/
+
+SELECT * FROM users;
+SELECT name, (to_days(now()) - to_days(birthday_at)) / 365.25 AS age FROM users;
+SELECT name, floor((to_days(now()) - to_days(birthday_at)) / 365.25) AS age FROM users;
+SELECT name, timestampdiff(YEAR, birthday_at, now()) AS age FROM users;
+
+SELECT * FROM users ORDER BY rand(); -- вывод полей таблицы в случайном порядке
+SELECT * FROM users ORDER BY rand() LIMIT 1; -- вывод одной случайной записи
+
+/*Информационные функции:
+ * SELECT VERSION() - возвращает текущую версию MySQL сервера
+ * SELECT LAST_INSERT_ID() - возвращает текущее значение счётчика в столбце "AUTO_INCREMENT"...не совсем понятно...
+ * SELECT DATABASE() - возврвщает текущую БД, если БД не выбрана, функция возвращает NULL
+ * SELECT USER() - возвращает текущего пользователя - root@localhost*/
+SELECT VERSION();
+SELECT LAST_INSERT_ID();
+SELECT DATABASE();
+SELECT USER();
+
+
 
 
 
