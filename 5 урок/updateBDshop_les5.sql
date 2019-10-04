@@ -1,5 +1,7 @@
 USE shop;
 
+DROP TABLE IF EXISTS cat;
+
 INSERT INTO catalogs (name) VALUES
     ('Жесткие диски'),
     ('Оперативная память');
@@ -36,9 +38,6 @@ SELECT * FROM catalogs WHERE name LIKE 'Процессоры';
 SELECT * FROM catalogs WHERE name LIKE '%ы';
 SELECT * FROM catalogs WHERE name NOT LIKE '%ы';
 
-SELECT * FROM users WHERE birthday_at >= '1990-01-01' AND birthday_at < '2000-01-01';
-SELECT * FROM users WHERE birthday_at BETWEEN '1990-01-01' AND '2000-01-01';
-
 INSERT INTO users (name, birthday_at) VALUES
     ('Геннадий', '1990-10-05'),
     ('Наталья', '1984-11-12'),
@@ -47,3 +46,29 @@ INSERT INTO users (name, birthday_at) VALUES
     ('Иван', '1998-01-12'),
     ('Мария', '1992-08-29');
     
+SELECT * FROM users WHERE birthday_at >= '1990-01-01' AND birthday_at < '2000-01-01';
+SELECT * FROM users WHERE birthday_at BETWEEN '1990-01-01' AND '2000-01-01';
+SELECT * FROM users WHERE birthday_at LIKE '199%';
+
+SELECT * FROM catalogs ORDER BY name;
+SELECT * FROM catalogs ORDER BY name DESC;
+
+INSERT INTO products(name, description, price, catalog_id) VALUES
+    ('Intel Core i3-8100', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 7890.00, 1),
+    ('Intel Core i5-7400', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 12700.00, 1),
+    ('AMD FX-8320E', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 4780.00, 1),
+    ('AMD FX-8320', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 7120.00, 1),
+    ('ASUS ROG MAXIMUS X HERO', 'Материнская плата ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX', 19310.00, 2),
+    ('Gigabyte H310M S2H', 'Материнская плата Gigabyte H310M S2H, H310, Socket 1151-V2, DDR4, mATX', 4790.00, 2),
+    ('MSI B250M GAMING PRO', 'Материнская плата MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 5060.00, 2);
+
+SELECT * FROM products;
+
+
+
+
+
+
+
+
+
