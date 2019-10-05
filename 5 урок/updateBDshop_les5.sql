@@ -1,3 +1,5 @@
+-- Работа в БД "shop" по материалам урока № 5
+
 USE shop;
 
 DROP TABLE IF EXISTS cat;

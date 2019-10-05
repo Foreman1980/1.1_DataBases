@@ -1,3 +1,5 @@
+-- Воспроизведение скрипта урока № 2 (создание БД "shop")
+
 DROP DATABASE IF EXISTS shop;
 CREATE DATABASE shop;
 
