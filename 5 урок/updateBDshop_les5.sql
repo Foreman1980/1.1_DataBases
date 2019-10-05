@@ -415,15 +415,3 @@ FROM users
 GROUP BY decade
 -- ORDER BY decade -- конструкция WITH ROLLUP с сортировкой почему- то не работает
 WITH ROLLUP;
-
-
-
-
-
-
-
-
-
-
-
-
