@@ -75,7 +75,146 @@ SELECT name, timestampdiff(YEAR, birthday_at, now()) AS age FROM users;
 SELECT * FROM users ORDER BY rand(); -- вывод полей таблицы в случайном порядке
 SELECT * FROM users ORDER BY rand() LIMIT 1; -- вывод одной случайной записи
 
--- -----------------------МОДУЛЬ № 5-----------------------
+-- -------------------------МОДУЛЬ № 5-------------------------
+
+SELECT id, name
+FROM users;
+
+-- функция вырезания подстроки из строки
+-- агументы - строка, начальный символ, конечный символ
+-- нумерация символов в строках начинается с единицы
+SELECT id, substring(name, 1, 5) AS name
+FROM users;
+
+-- функция объединенния строк
+SELECT id, concat(name, ' ', timestampdiff(YEAR, birthday_at, now())) AS name
+FROM users;
+-- о, у Геннадия сегодня ДР! (05.10.2019)
+
+-- Вывод слов "совершеннолетний" или "несовершеннолетний" в зависимости от того достиг пользователь 18 лет или нет
+
+-- Логические функции помогают преобразовать результат в зависимости от выполнения того или иного условия
+-- аргументы - лог. выражение, результаты при истинном лог. выражении и при ложном
+SELECT IF(TRUE, 'истина', 'ложь'), IF(FALSE, 'истина', 'ложь');
+
+-- Изменим дату рождений пользователя Марии для выполнения следующего задания
+
+UPDATE users
+SET birthday_at = '2006-08-29'
+WHERE id = 6;
+
+SELECT *
+FROM users;
+
+SELECT
+    name,
+    IF(
+        timestampdiff(YEAR, birthday_at, now()) >= 18,
+        'совершеннолетний',
+        'несовершеннолетний'
+    ) AS status
+FROM
+    users;
+
+/*--------------------------ТЕМА - Агрегация----------------------------*/
+/*-------------------МОДУЛЬ № 1 - Группировка данных.-------------------*/
+
+SELECT catalog_id
+FROM products;
+
+SELECT DISTINCT catalog_id
+FROM products;
+
+SELECT
+    id,
+    name,
+    id % 3
+FROM
+    products
+ORDER BY id % 3;
+
+-- группировка содержимого таблицы по полю "catalog_id"
+SELECT catalog_id
+FROM products
+GROUP BY catalog_id;
+
+-- для группировки могут использоваться также вычисляемые значения
+SELECT
+    id,
+    name,
+    birthday_at
+FROM users;
+
+SELECT
+    id,
+    name,
+    substring(birthday_at, 1, 3) AS decade
+FROM users;
+
+SELECT
+    id,
+    name,
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+ORDER BY decade;
+
+SELECT
+    count(*),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade
+ORDER BY decade DESC;
+
+SELECT
+    count(*),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade
+ORDER BY count(*);
+
+SELECT
+    count(*) AS total,
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade
+ORDER BY total
+LIMIT 2;
+
+-- вывод количества записей в таблице
+SELECT
+    count(*)
+FROM users;
+
+-- вывод содержимого группы
+SELECT
+    group_concat(name),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade;
+
+-- вывод с сепаратором
+SELECT
+    group_concat(name SEPARATOR ', '),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade;
+
+-- вывод с сортировкой
+SELECT
+    group_concat(name ORDER BY name DESC SEPARATOR ', '),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade;
+-- функция "GROUP_CONCAT" имеет ограничение, она может извлекать из группы максимум 1000 элементов
+-- но это можно изменить с помощью параметра сервера "GROUP_CONCAT_MAX_LEN" (на слух)
+
+/*------------------МОДУЛЬ № 2 - Агрегационные функции.------------------*/
+
+
+
+
+
+
 
 
 
