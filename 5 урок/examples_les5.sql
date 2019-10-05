@@ -89,11 +89,20 @@ INSERT INTO distances (a, b) VALUES
 
 SELECT * FROM distances;
 
+/*Вычисление площади треугольника с использованием функции SIN*/
 
+DROP TABLE IF EXISTS triangles;
+CREATE TABLE triangles(
+    id serial,
+    a double NOT NULL comment 'Сторона треугольника',
+    b double NOT NULL comment 'Сторона треугольника',
+    angle int NOT NULL comment 'Угол треугольника в градусах',
+    square double AS (a * b * sin(radians(angle)) / 2),
+    
+    PRIMARY KEY (id)
+) comment 'Площадь треугольника';
 
-
-
-
+INSERT INTO triangles
 
 
 
