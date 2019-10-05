@@ -116,8 +116,8 @@ SELECT
 FROM
     users;
 
-/*--------------------------ТЕМА - Агрегация----------------------------*/
-/*-------------------МОДУЛЬ № 1 - Группировка данных.-------------------*/
+/*--------------------------Тема - Агрегация----------------------------*/
+/*-------------------Модуль № 1 - Группировка данных.-------------------*/
 
 SELECT catalog_id
 FROM products;
@@ -208,8 +208,8 @@ GROUP BY decade;
 -- функция "GROUP_CONCAT" имеет ограничение, она может извлекать из группы максимум 1000 элементов
 -- но это можно изменить с помощью параметра сервера "GROUP_CONCAT_MAX_LEN" (на слух)
 
-/*-----------------МОДУЛЬ № 2 - Агрегационные функции.------------------*/
--- План:
+/*-----------------Модуль № 2 - Агрегационные функции.------------------*/
+-- Содержание:
 -- Особенности функции COUNT()
 -- Поиск минимального и максимального значаний
 -- Среднее значение
@@ -290,20 +290,131 @@ SELECT
 FROM products
 GROUP BY catalog_id;
 
-/*------------МОДУЛЬ № 3 - Специальные возможности GROUP BY.------------*/
+/*------------Модуль № 3 - Специальные возможности GROUP BY.------------*/
+-- Содержание:
+-- Условие HAVING
+-- Получение уникальных значений
+-- Функция ANY_VALUE()
+-- Конструкция WITH ROLLUP
 
+SELECT
+    group_concat(name ORDER BY name SEPARATOR ', '),
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade;
 
+SELECT
+    count(*) AS total,
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade
+ORDER BY decade;
 
+SELECT
+    count(*) AS total,
+    substring(birthday_at, 1, 3) AS decade
+FROM users
+GROUP BY decade
+HAVING total >= 2
+ORDER BY decade;
 
+-- перенос уникальных строк из одной таблицы в другую
+-- создадим временную таблицу
+DROP TABLE IF EXISTS products_new;
+CREATE TABLE products_new(
+    id serial,
+    name VARCHAR(255) comment 'Название раздела',
+    description TEXT comment 'Описание',
+    price DECIMAL(11,2) comment 'Цена',
+    catalog_id INT UNSIGNED,
+    created_at DATETIME DEFAULT current_timestamp,
+    updated_at DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
+    
+    PRIMARY KEY(id),
+    KEY index_of_catalog_id(catalog_id)
+) comment = 'Товарные позиции';
 
+-- в таблицу "products" дважды добавим один и тот же товар
+truncate products;
+INSERT INTO products(name, description, price, catalog_id) VALUES
+    ('Intel Core i3-8100', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 7890.00, 1),
+    ('Intel Core i5-7400', 'Процессор для настольных персональных компьютеров, основанных на платформе Intel.', 12700.00, 1),
+    ('AMD FX-8320E', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 4780.00, 1),
+    ('AMD FX-8320', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.', 7120.00, 1),
+    ('ASUS ROG MAXIMUS X HERO', 'Материнская плата ASUS ROG MAXIMUS X HERO, Z370, Socket 1151-V2, DDR4, ATX', 19310.00, 2),
+    ('Gigabyte H310M S2H', 'Материнская плата Gigabyte H310M S2H, H310, Socket 1151-V2, DDR4, mATX', 4790.00, 2),
+    ('MSI B250M GAMING PRO', 'Материнская плата MSI B250M GAMING PRO, B250, Socket 1151, DDR4, mATX', 5060.00, 2);
 
+SELECT * FROM products;
 
+-- перенесём уникальные записи во временную таблицу "products_new"
+INSERT INTO products_new(
+    name,
+    description,
+    price,
+    catalog_id,
+    created_at,
+    updated_at
+)
+SELECT
+-- здесь можно было указать NULL и тогда в разделе INSERT не нужно было бы перечислять названия столбцов для вставки
+    name,
+    description,
+    price,
+    catalog_id,
+    now(),
+    now()
+FROM products
+GROUP BY
+    name,
+    description,
+    price,
+    catalog_id;
 
+SELECT * FROM products_new;
 
+-- удалим таблицу products и дадим её имя таблице products_new 
+DROP TABLE IF EXISTS products;
+ALTER TABLE products_new RENAME products;
 
+SHOW tables;
+SELECT * FROM products;
 
+-- для группировки можно использовать вычисляемые значения
+SELECT
+    name,
+    birthday_at
+FROM users
+ORDER BY birthday_at;
 
+SELECT
+    name,
+    birthday_at
+FROM users
+ORDER BY birthday_at;
 
+SELECT
+    group_concat(name ORDER BY name SEPARATOR ', ') AS name,
+    YEAR(birthday_at) AS birthday_year
+FROM users
+GROUP BY birthday_year
+ORDER BY birthday_year;
+
+-- так же можно использовать функцию ANY_VALUE(), кот. возвращает случайное значение из группы
+SELECT
+    any_value(name) AS name,
+    YEAR(birthday_at) AS birthday_year
+FROM users
+GROUP BY birthday_year
+ORDER BY birthday_year;
+
+SELECT
+    substring(birthday_at, 1, 3) AS decade,
+    count(*) AS total
+FROM users
+GROUP BY decade
+-- ORDER BY decade -- конструкция WITH ROLLUP с сортировкой почему- то не работает
+WITH ROLLUP;
 
 
 
