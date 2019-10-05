@@ -208,7 +208,103 @@ GROUP BY decade;
 -- функция "GROUP_CONCAT" имеет ограничение, она может извлекать из группы максимум 1000 элементов
 -- но это можно изменить с помощью параметра сервера "GROUP_CONCAT_MAX_LEN" (на слух)
 
-/*------------------МОДУЛЬ № 2 - Агрегационные функции.------------------*/
+/*-----------------МОДУЛЬ № 2 - Агрегационные функции.------------------*/
+-- План:
+-- Особенности функции COUNT()
+-- Поиск минимального и максимального значаний
+-- Среднее значение
+-- Подсчёт суммы столбца
+
+-- агрегационная функция COUNT() возвращает количество строк таблицы, значение столбца для кот. отлично от NULL 
+SELECT count(id)
+FROM catalogs;
+
+-- при использовании символа "*" будет возвращено количество строк таблицы вне зависимости от того принимают какие-то из полей значения NULL или нет 
+SELECT count(*)
+FROM catalogs;
+
+SELECT catalog_id
+FROM products;
+
+-- используя GROUP BY мы разбиваем таблицу на две группы
+SELECT catalog_id
+FROM products
+GROUP BY catalog_id;
+
+-- используя функцию COUNT() мы можем подсчитать количество записей в каждой из этих групп
+SELECT
+    catalog_id,
+    count(*) AS total
+FROM products
+GROUP BY catalog_id;
+
+SELECT
+    count(id) AS total_ids,
+    count(catalog_id) AS total_catalog_ids
+FROM products;
+
+SELECT
+    count(DISTINCT id) AS total_ids,
+    count(DISTINCT catalog_id) AS total_catalog_ids
+FROM products;
+
+-- функции MIN() и MAX() возвращают минимальное и максимальное значение столбца
+SELECT
+    min(price),
+    max(price)
+FROM products;
+
+SELECT
+    catalog_id,
+    min(price),
+    max(price)
+FROM products
+GROUP BY catalog_id;
+
+SELECT
+    id,
+    name,
+    price
+FROM products
+ORDER BY price DESC
+LIMIT 1;
+
+-- функция AVG() возвращает среднее значение
+SELECT
+    catalog_id,
+    round(avg(price), 2) AS price
+FROM products
+GROUP BY catalog_id;
+
+-- мы можем увеличить возвращаемую цену на 20% 
+SELECT
+    catalog_id,
+    round(avg(price) * 1.2, 2) AS price
+FROM products
+GROUP BY catalog_id;
+
+-- функция SUM() возвращает сумму всех значений столбца
+SELECT
+    catalog_id,
+    sum(price) AS summ
+FROM products
+GROUP BY catalog_id;
+
+/*------------МОДУЛЬ № 3 - Специальные возможности GROUP BY.------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
