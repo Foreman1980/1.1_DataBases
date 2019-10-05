@@ -1,6 +1,6 @@
 -- Воспроизведение материала урока № 5 для закрепления
 
-USE shop;
+USE example;
 
 SHOW DATABASES;
 SHOW tables;
@@ -45,6 +45,61 @@ SELECT DATABASE();
 SELECT USER();
 
 -- -----------------------МОДУЛЬ № 5-----------------------
+
+/*Использование встроенных функций*/
+/*Вычисление расстояния между точками*/
+
+DROP TABLE IF EXISTS distances;
+CREATE TABLE distances(
+    id serial,
+    x1 int NOT NULL,
+    y1 int NOT NULL,
+    x2 int NOT NULL,
+    y2 int NOT NULL,
+    distance double AS (sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))),
+    
+    PRIMARY KEY (id)
+) comment 'Расстояние между двумя точками';
+
+truncate distances;
+INSERT INTO distances (x1, y1, x2, y2) VALUES
+    (1, 1, 4, 5),
+    (4, -1, 3, 2),
+    (-2, 5, 1, 3);
+
+SELECT * FROM distances;
+
+/*То же самое с использованием JSON полей*/
+
+DROP TABLE IF EXISTS distances;
+CREATE TABLE distances(
+    id serial,
+    a json NOT NULL,
+    b json NOT NULL,
+    distance double AS (sqrt(pow(a->>'$.x' - b->>'$.x', 2) + pow(a->>'$.y' - b->>'$.y', 2))),
+    
+    PRIMARY KEY (id)
+) comment 'Расстояние между двумя точками';
+
+truncate distances;
+INSERT INTO distances (a, b) VALUES
+    ('{"x": 1, "y": 1}', '{"x": 4, "y": 5}'),
+    ('{"x": 4, "y": -1}', '{"x": 3, "y": 2}'),
+    ('{"x": -2, "y": 5}', '{"x": 1, "y": 3}');
+
+SELECT * FROM distances;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
