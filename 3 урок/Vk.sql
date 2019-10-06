@@ -40,6 +40,8 @@ CREATE TABLE users(
 	INDEX users_name_idx(first_name, last_name)
 );
 
+ALTER TABLE users ADD is_deleted bit DEFAULT 0 NOT NULL;
+
 -- Создание таблицы с профилями пользователей:
 
 DROP TABLE IF EXISTS profiles;
