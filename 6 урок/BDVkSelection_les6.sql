@@ -2,7 +2,7 @@
 
 USE vk;
 
--- Получить фото профиля, полное имя пользователя и город проживания
+/*---Получить фото профиля, полное имя пользователя и город проживания---*/
 -- Шаг 1
 SELECT
     first_name,
@@ -49,7 +49,7 @@ SELECT
 FROM users
 WHERE id = 1;
 
--- Получить все фото пользователя
+/*--------------------Получить все фото пользователя--------------------*/
 -- Шаг 1
 SELECT id
 FROM media_types
@@ -62,7 +62,7 @@ WHERE user_id = 1 AND media_type_id = ( SELECT id
                                         FROM media_types
                                         WHERE name LIKE 'photo');
 
--- Получить все фото пользователя по его e-mail ('smitham.demarcus@example.net')
+/*Получить все фото пользователя по его e-mail ('smitham.demarcus@example.net')*/
 -- Шаг 1
 SELECT id
 FROM users
@@ -77,13 +77,13 @@ WHERE user_id = (   SELECT id
                                                                                         FROM media_types
                                                                                         WHERE name LIKE 'photo');
 
--- Получить все новости пользователя с id = 3
+/*--------------Получить все новости пользователя с id = 3--------------*/
 -- Шаг 1
 SELECT *
 FROM media
 WHERE user_id = 3;
 
--- Получить все видео-записи указанного пользователя с id = 3
+/*------Получить все видео-записи указанного пользователя с id = 3------*/
 -- Шаг 1
 SELECT id
 FROM media_types AS mt
@@ -96,18 +96,76 @@ WHERE user_id = 3 AND media_type_id = ( SELECT id
                                         FROM media_types AS mt
                                         WHERE name LIKE 'video');
 
--- Вывести архив новостей по месяцам
--- Шаг 1
+/*-------------------Вывести архив новостей по месяцам-------------------*/
+-- Шаг 1 - Выделим месяца из даты создания новостей
+SELECT monthname(created_at)
+FROM media;
+                                    
+-- Шаг 2 - Сгруппируем записи по месяцам создания новостей и выведем их кол-во
+SELECT
+    count(*),
+    monthname(created_at) AS month_create
+FROM media
+GROUP BY month_create
+ORDER BY month(created_at);
+-- WITH ROLLUP;
 
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+-- Шаг 3 - Сортировка по кол-ву новостей за месяц
+SELECT
+    count(*),
+    monthname(created_at) AS month_create
+FROM media
+GROUP BY month_create
+ORDER BY count(*) DESC;
+
+/*----------------Сколько новостей у каждого пользователя----------------*/
+-- Шаг 1
+SELECT
+    user_id,
+    count(id) AS total
+FROM media
+GROUP BY user_id
+ORDER BY total desc;
+
+/*--------Количество новостей пользователей, у кот. оно больше 1--------*/
+-- Шаг 1
+SELECT
+    user_id,
+    count(id) AS total
+FROM media
+GROUP BY user_id
+HAVING total > 1
+ORDER BY total desc;
+
+/*-----------------Вывести список id друзей пользователя-----------------*/
+-- Шаг 1 - выведем всю таблицу friend_requests
+SELECT *
+FROM friend_requests;
+
+-- Шаг 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
