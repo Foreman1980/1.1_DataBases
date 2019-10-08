@@ -137,35 +137,183 @@ GROUP BY user_id
 HAVING total > 1
 ORDER BY total desc;
 
-/*-----------------Вывести список id друзей пользователя-----------------*/
+/*------------Вывести список id друзей пользователя с id = 1------------*/
 -- Шаг 1 - выведем всю таблицу friend_requests
 SELECT *
 FROM friend_requests;
 
+-- Шаг 2 - выведем список пользователей, кот. "взаимодействовали" с пользователем id = 1
+SELECT
+    from_user_id,
+    to_user_id,
+    status
+FROM friend_requests
+WHERE from_user_id = 1 OR to_user_id = 1;
+
+-- Шаг 3 - выведем список всех друзей пользователя с id = 1
+SELECT
+    from_user_id,
+    to_user_id,
+    status
+FROM friend_requests
+WHERE (from_user_id = 1 OR to_user_id = 1) AND status = 'approved';
+
+/*------------Вывести новости друзей пользователя с id = 1------------*/
+-- Шаг 1
+SELECT *
+FROM media;
+WHERE user_id = ;
+
 -- Шаг 2
+SELECT
+    from_user_id
+FROM friend_requests
+WHERE to_user_id = 1 AND status = 'approved';
 
+SELECT
+    to_user_id
+FROM friend_requests
+WHERE from_user_id = 1 AND status = 'approved';
 
+-- Шаг 3
+SELECT *
+FROM media
+WHERE user_id IN (( SELECT
+                        from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved'), (SELECT
+                                                                        to_user_id
+                                                                    FROM friend_requests
+                                                                    WHERE from_user_id = 1 AND status = 'approved'
+                                                                    LIMIT 1), ( SELECT
+                                                                                    to_user_id
+                                                                                FROM friend_requests
+                                                                                WHERE from_user_id = 1 AND status = 'approved'
+                                                                                LIMIT 1 offset 1));
 
+-- объединение выборок с помощью ключевого слвоа UNION
+SELECT *
+FROM media
+WHERE user_id IN (( SELECT
+                        from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved') UNION (   SELECT
+                                                                                to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved'));
 
+/*---------Объединить новости пользователя с id = 1 и его друзей---------*/
+-- Шаг 1
+SELECT *
+FROM media
+WHERE user_id = 1
 
+UNION
 
+SELECT *
+FROM media
+WHERE user_id IN (( SELECT
+                        from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved') UNION (   SELECT
+                                                                                to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved'));
 
+-- Шаг 2 - отсортируем список новостей по дате создания
+SELECT *
+FROM media
+WHERE user_id = 1
 
+UNION
 
+SELECT *
+FROM media
+WHERE user_id IN (( SELECT
+                        from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved') UNION (   SELECT
+                                                                                to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved'))
+ORDER BY created_at desc;
 
+/*------------Подсчитать лайки новостей пользователя с id = 1------------*/
+-- Шаг 1
+DESCRIBE likes;
+SELECT *
+FROM likes;
 
+SELECT count(*)
+FROM likes
+WHERE media_id IN ( SELECT id
+                    FROM media
+                    WHERE user_id = 1);
 
+/*--------Вывести все сообщения от пользователя с id = 1 и к нему--------*/
+-- Шаг 1
+SELECT
+    body,
+    created_at
+FROM messages
+WHERE from_user_id = 1 OR to_user_id = 1
+ORDER BY created_at desc;
 
+/*-Вывести все непрочитанные сообщения от пользователя с id = 1 и к нему-*/
+-- Шаг 1
+SELECT
+    body,
+    created_at
+FROM messages
+WHERE (from_user_id = 1 OR to_user_id = 1) AND is_read = 0
+ORDER BY created_at desc;
 
+/*-------Вывести друзей пользователя с id = 1 с указанием их пола-------*/
+-- Шаг 1
+SELECT
+    user_id,
+    CASE
+        WHEN gender = 'f' THEN 'женщина'
+        ELSE 'мужчина'
+    END AS 'gender'
+FROM profiles
+WHERE user_id IN (  SELECT from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved');
 
+-- альтернативный синтаксис (как в видео вебинара)
+SELECT
+    user_id,
+    CASE (gender)
+        WHEN 'f' THEN 'женщина'
+        ELSE 'мужчина'
+    END AS 'gender'
+FROM profiles
+WHERE user_id IN (  SELECT from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved');
 
+-- Шаг 1 -добавим указание возраста друга
+SELECT
+    user_id,
+    CASE (gender)
+        WHEN 'f' THEN 'женщина'
+        ELSE 'мужчина'
+    END AS 'gender',
+    timestampdiff(YEAR, birthday, now()) AS 'возраст'
+FROM profiles
+WHERE user_id IN (  SELECT from_user_id
+                    FROM friend_requests
+                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
+                                                                            FROM friend_requests
+                                                                            WHERE from_user_id = 1 AND status = 'approved');
 
-
-
-
-
-
-
-
-
-
+/*--------Определить является ли пользователь админом сообщества--------*/
+-- Шаг 1
+SELECT IF (1 = (SELECT admin_user_id
+            FROM communities
+            WHERE id = 2), 'admin', 'user') AS status;
