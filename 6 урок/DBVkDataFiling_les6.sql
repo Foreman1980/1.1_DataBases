@@ -1107,6 +1107,11 @@ INSERT INTO `messages` (`id`, `from_user_id`, `to_user_id`, `body`, `created_at`
 INSERT INTO `messages` (`id`, `from_user_id`, `to_user_id`, `body`, `created_at`) VALUES ('999', '99', '99', 'Maiores dolorum qui quae non cupiditate. Et dignissimos repellat aspernatur exercitationem saepe. Ut esse et laborum quo. Non aut numquam numquam voluptate voluptates deleniti iure delectus.', '2012-07-12 21:51:39');
 INSERT INTO `messages` (`id`, `from_user_id`, `to_user_id`, `body`, `created_at`) VALUES ('1000', '100', '100', 'Debitis aperiam dolore praesentium accusamus aut id. Quod blanditiis velit ea repudiandae odio adipisci voluptas voluptatum. Expedita in aperiam placeat deleniti. Fugiat itaque est suscipit voluptatibus totam voluptas.', '1970-08-14 23:08:02');
 
+-- добавим некоторым старым сообщениям статус прочитанности, т.к. на уроке № 6 в таблицу "messages" было добавлено поле  "is_read"
+UPDATE messages
+SET is_read = 1
+WHERE created_at < '1999-12-31 23:59:59';
+
 INSERT INTO
     friend_requests
 VALUES
