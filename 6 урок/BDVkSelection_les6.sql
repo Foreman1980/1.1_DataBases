@@ -77,16 +77,37 @@ WHERE user_id = (   SELECT id
                                                                                         FROM media_types
                                                                                         WHERE name LIKE 'photo');
 
+-- Получить все новости пользователя с id = 3
+-- Шаг 1
+SELECT *
+FROM media
+WHERE user_id = 3;
 
+-- Получить все видео-записи указанного пользователя с id = 3
+-- Шаг 1
+SELECT id
+FROM media_types AS mt
+WHERE name LIKE 'video';
 
+-- Шаг 2
+SELECT *
+FROM media
+WHERE user_id = 3 AND media_type_id = ( SELECT id
+                                        FROM media_types AS mt
+                                        WHERE name LIKE 'video');
 
+-- Вывести архив новостей по месяцам
+-- Шаг 1
 
-
-
-
-
-
-
-
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
 
 
