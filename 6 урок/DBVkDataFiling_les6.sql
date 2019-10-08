@@ -1113,34 +1113,25 @@ SET is_read = 1
 WHERE created_at < '1999-12-31 23:59:59';
 
 -- выяснилось, что по сгенерированным данным пользователи пишут сами себе...
-SELECT *
-FROM messages;
+/*SELECT *
+FROM messages;*/
 
--- исправим это для первых 30-ти пользователей
+-- исправим это для получателей
 UPDATE messages
-SET to_user_id = floor(1 + rand()*30)
-WHERE from_user_id >= 1 AND from_user_id < 30;
+SET to_user_id = floor(1 + rand()*100);
 
-SELECT *
-FROM messages
-WHERE from_user_id >= 1 AND from_user_id < 30;
+-- исправим это для отправителей
+UPDATE messages
+SET from_user_id = floor(1 + rand()*100);
 
 -- проверка оставшихся равными id автора сообщения и получателя
-SELECT *
+/*SELECT *
 FROM messages
-WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;
+WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;*/
 
 -- исправление оставшихся сообщений
 UPDATE messages
-SET to_user_id = IF(from_user_id = to_user_id, floor(to_user_id + 1 + rand()*3), to_user_id)
-WHERE from_user_id >= 1 AND from_user_id < 20;
-
--- проверка оставшихся равными id автора сообщения и получателя
-SELECT *
-FROM messages
-WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;
--- пользователей из первой тридцатки пишущих сами себе не осталось
-
+SET from_user_id = IF(from_user_id = to_user_id, floor(1 + rand()*100), from_user_id);
 
 INSERT INTO
     friend_requests
@@ -1432,6 +1423,78 @@ VALUES
     ('12','12','1','1995-07-17 21:22:38'),
     ('13','13','3','1985-09-07 23:34:21'),
     ('14','14','14','1973-01-27 23:11:53'); 
+
+/*truncate likes;
+INSERT INTO
+    likes(user_id, media_id)
+VALUES 
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30)),
+    ((1 + rand() * 30), (1 + rand() * 30));*/
+
+-- нужно проверить, чтобы небыло дублей, т.е. лайков одного пользователя одного и того же сообщения
+-- проверим записи в табл. "likes" на дублирование
+/*SELECT
+    group_concat(id SEPARATOR ', ') AS ids,
+    user_id,
+    media_id,
+    count(*)
+FROM likes
+GROUP BY user_id, media_id
+HAVING count(*) > 1;*/
+-- обнаружено, что в посте с media_id=24 за пользователем c id=9 числятся два лайка...исправим это
+/*UPDATE likes
+SET user_id = (1 + rand() * 30)
+WHERE id = 8;*/
+-- повторная проверка прошла успешно
 
 INSERT INTO
     photo_album(id, user_id, name, created_at)
