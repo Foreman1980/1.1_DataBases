@@ -1112,6 +1112,36 @@ UPDATE messages
 SET is_read = 1
 WHERE created_at < '1999-12-31 23:59:59';
 
+-- выяснилось, что по сгенерированным данным пользователи пишут сами себе...
+SELECT *
+FROM messages;
+
+-- исправим это для первых 30-ти пользователей
+UPDATE messages
+SET to_user_id = floor(1 + rand()*30)
+WHERE from_user_id >= 1 AND from_user_id < 30;
+
+SELECT *
+FROM messages
+WHERE from_user_id >= 1 AND from_user_id < 30;
+
+-- проверка оставшихся равными id автора сообщения и получателя
+SELECT *
+FROM messages
+WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;
+
+-- исправление оставшихся сообщений
+UPDATE messages
+SET to_user_id = IF(from_user_id = to_user_id, floor(to_user_id + 1 + rand()*3), to_user_id)
+WHERE from_user_id >= 1 AND from_user_id < 20;
+
+-- проверка оставшихся равными id автора сообщения и получателя
+SELECT *
+FROM messages
+WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;
+-- пользователей из первой тридцатки пишущих сами себе не осталось
+
+
 INSERT INTO
     friend_requests
 VALUES
