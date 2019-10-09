@@ -23,18 +23,13 @@ FROM profiles
 WHERE user_id = 1;
 
 -- Шаг 4
-SELECT photo_id
-FROM profiles
-WHERE user_id = 1;
-
--- Шаг 5
 SELECT file_name
 FROM media
 WHERE id = ( SELECT photo_id
              FROM profiles
              WHERE user_id = 1);
 
--- Шаг 6
+-- Шаг 5
 SELECT
     first_name,
     last_name,
