@@ -21,12 +21,12 @@ SET to_user_id = floor(1 + rand()*100);
 UPDATE messages
 SET from_user_id = floor(1 + rand()*100);
 
--- проверка оставшихся равными id автора сообщения и получателя
+-- проверка оставшихся сообщений с равными id автора и получателя
 SELECT *
 FROM messages
 WHERE from_user_id >= 1 AND from_user_id < 20 AND from_user_id = to_user_id;
 
--- исправление оставшихся сообщений
+-- исправление оставшихся сообщений с равными id автора и получателя
 UPDATE messages
 SET from_user_id = IF(from_user_id = to_user_id, floor(1 + rand()*100), from_user_id);
 
