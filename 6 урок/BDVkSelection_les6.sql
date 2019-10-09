@@ -38,7 +38,7 @@ SELECT
         WHERE user_id = 1) AS 'city',
     (   SELECT file_name
         FROM media
-        WHERE id = (   SELECT photo_id
+        WHERE id = (    SELECT photo_id
                         FROM profiles
                         WHERE user_id = 1)) AS 'main_photo'
 FROM users
@@ -120,7 +120,7 @@ SELECT
     count(id) AS total
 FROM media
 GROUP BY user_id
-ORDER BY total desc;
+ORDER BY total DESC;
 
 /*--------Количество новостей пользователей, у кот. оно больше 1--------*/
 -- Шаг 1
@@ -130,7 +130,7 @@ SELECT
 FROM media
 GROUP BY user_id
 HAVING total > 1
-ORDER BY total desc;
+ORDER BY total DESC;
 
 /*------------Вывести список id друзей пользователя с id = 1------------*/
 -- Шаг 1 - выведем всю таблицу friend_requests
@@ -252,7 +252,7 @@ SELECT
     created_at
 FROM messages
 WHERE from_user_id = 1 OR to_user_id = 1
-ORDER BY created_at desc;
+ORDER BY created_at DESC;
 
 /*-Вывести все непрочитанные сообщения от пользователя с id = 1 и к нему-*/
 -- Шаг 1
@@ -261,7 +261,7 @@ SELECT
     created_at
 FROM messages
 WHERE (from_user_id = 1 OR to_user_id = 1) AND is_read = 0
-ORDER BY created_at desc;
+ORDER BY created_at DESC;
 
 /*-------Вывести друзей пользователя с id = 1 с указанием их пола-------*/
 -- Шаг 1
@@ -274,9 +274,9 @@ SELECT
 FROM profiles
 WHERE user_id IN (  SELECT from_user_id
                     FROM friend_requests
-                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
-                                                                            FROM friend_requests
-                                                                            WHERE from_user_id = 1 AND status = 'approved');
+                    WHERE to_user_id = 1 AND status = 'approved' UNION  SELECT to_user_id
+                                                                        FROM friend_requests
+                                                                        WHERE from_user_id = 1 AND status = 'approved');
 
 -- альтернативный синтаксис (как в видео вебинара)
 SELECT
@@ -288,9 +288,9 @@ SELECT
 FROM profiles
 WHERE user_id IN (  SELECT from_user_id
                     FROM friend_requests
-                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
-                                                                            FROM friend_requests
-                                                                            WHERE from_user_id = 1 AND status = 'approved');
+                    WHERE to_user_id = 1 AND status = 'approved' UNION  SELECT to_user_id
+                                                                        FROM friend_requests
+                                                                        WHERE from_user_id = 1 AND status = 'approved');
 
 -- Шаг 1 -добавим указание возраста друга
 SELECT
@@ -303,12 +303,12 @@ SELECT
 FROM profiles
 WHERE user_id IN (  SELECT from_user_id
                     FROM friend_requests
-                    WHERE to_user_id = 1 AND status = 'approved' UNION    SELECT to_user_id
-                                                                            FROM friend_requests
-                                                                            WHERE from_user_id = 1 AND status = 'approved');
+                    WHERE to_user_id = 1 AND status = 'approved' UNION  SELECT to_user_id
+                                                                        FROM friend_requests
+                                                                        WHERE from_user_id = 1 AND status = 'approved');
 
 /*--------Определить является ли пользователь админом сообщества--------*/
 -- Шаг 1
 SELECT IF (1 = (SELECT admin_user_id
-            FROM communities
-            WHERE id = 2), 'admin', 'user') AS status;
+                FROM communities
+                WHERE id = 2), 'admin', 'user') AS status;
