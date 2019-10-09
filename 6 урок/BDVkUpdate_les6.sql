@@ -1,24 +1,10 @@
-/* Практическое задание к уроку № 3 по теме “Введение в проектирование БД”
- * 
- * 1. Проанализировать структуру БД vk, которую мы создали на занятии, и внести предложения по
- * усовершенствованию (если такие идеи есть). Напишите пожалуйста, всё-ли понятно по
- * структуре.
- * 2. Добавить необходимую таблицу/таблицы для того, чтобы можно было использовать лайки для
- * медиафайлов, постов и пользователей.
- * 3. Используя сервис http://filldb.info или другой по вашему желанию, сгенерировать тестовые
- * данные для всех таблиц, учитывая логику связей. Для всех таблиц, где это имеет смысл,
- * создать не менее 100 строк. Создать локально БД vk и загрузить в неё тестовые данные. */
-
--- Воспроизведение инфраструктуры БД "vk" из Урока № 3.
-
--- Содание БД "vk":
+/*---Доработка БД "shop" по материалам урока № 6---*/
 
 DROP DATABASE IF EXISTS vk;
 CREATE DATABASE vk;
 USE vk;
 
 -- Создание таблицы с пользователями:
-
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
 	id serial, -- SERIAL = BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE
@@ -40,8 +26,9 @@ CREATE TABLE users(
 	INDEX users_name_idx(first_name, last_name)
 );
 
--- Создание таблицы с профилями пользователей:
+ALTER TABLE users ADD is_deleted bit DEFAULT 0 NOT NULL;
 
+-- Создание таблицы с профилями пользователей:
 DROP TABLE IF EXISTS profiles;
 CREATE TABLE profiles(
 	user_id serial,
@@ -62,7 +49,6 @@ ALTER TABLE profiles
 ;
 
 -- Создание таблицы с сообщениями
-
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages(
 	id serial,
@@ -80,8 +66,11 @@ CREATE TABLE messages(
 	FOREIGN KEY (to_user_id) REFERENCES users(id)
 );
 
--- Создание таблицы с запросами о дружбе:
+-- Добавляем функционал отметки о прочтении сообщения пользователем
+ALTER TABLE messages
+ADD is_read bit DEFAULT 0 NOT NULL;
 
+-- Создание таблицы с запросами о дружбе:
 DROP TABLE IF EXISTS friend_requests;
 CREATE TABLE friend_requests(
 	-- id serial PRIMARY KEY,
@@ -113,7 +102,6 @@ CREATE TABLE friend_requests(
  * "id" пользователя и сообщества. */
 
 -- Создание таблицы с сообществами:
-
 DROP TABLE IF EXISTS communities;
 CREATE TABLE communities(
 	id serial,
@@ -128,7 +116,6 @@ CREATE TABLE communities(
 );
 
 -- Создание таблицы для организации связи пользователей и сообществ:
-
 DROP TABLE IF EXISTS users_communities;
 CREATE TABLE users_communities(
 	user_id bigint UNSIGNED NOT NULL,
@@ -144,7 +131,6 @@ CREATE TABLE users_communities(
  * возможные типы медиа-данных */
 
 -- Создание таблицы с типами медиа-данных, кот. можно использовать в посте:
-
 DROP TABLE IF EXISTS media_types;
 CREATE TABLE media_types(
 	id serial,
@@ -156,7 +142,6 @@ CREATE TABLE media_types(
 );
 
 -- Создание таблицы с постами пользователей:
-
 DROP TABLE IF EXISTS media;
 CREATE TABLE media(
 	id serial,
@@ -183,7 +168,6 @@ CREATE TABLE media(
 );
 
 -- Создание таблицы с отметками "like":
-
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes(
 	id serial,
@@ -198,7 +182,6 @@ CREATE TABLE likes(
 );
 
 -- Создание таблицы с фотоальбомами:
-
 DROP TABLE IF EXISTS photo_album;
 CREATE TABLE photo_album(
 	id serial,
@@ -211,10 +194,7 @@ CREATE TABLE photo_album(
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Создание таблицы с фотографиями.
-
-/*  Они могут как принадлежать фотоальбому, так и быть самостоятельными */
-
+-- Создание таблицы с фотографиями (они могут как принадлежать фотоальбому, так и быть самостоятельными).
 DROP TABLE IF EXISTS photos;
 CREATE TABLE photos(
 	id serial,
@@ -229,18 +209,4 @@ CREATE TABLE photos(
 );
 
 -- Добавим внешний ключ к полю "photo_id" таблицы "profiles":
-
 ALTER TABLE profiles ADD CONSTRAINT fk_photo_id FOREIGN KEY (photo_id) REFERENCES media(id);
-
-/* Задание № 1:
- * Воспроизвёл скрипт. Вроде всё понятно, но самому что-то дополнить пока сложно...
- * 
- * Задание № 2:
- * Вроде этот функционал уже есть? я видимо не понимаю задания...
- * 
- * Задание № 3:
- * Данные для заполнения в файле "fulldb21-09-2019 18-45.sql". Нужно их поправить немного, но суть понятна. */
-
-
-
-
