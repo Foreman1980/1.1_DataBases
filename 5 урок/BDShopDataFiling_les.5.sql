@@ -3,11 +3,39 @@
 USE shop;
 
 truncate catalogs;
-INSERT INTO catalogs (name)
-VALUES
+/* INSERT INTO catalogs VALUES (DEFAULT, 'Процессоры');
+ INSERT INTO catalogs VALUES (DEFAULT, 'Мат. платы');
+ INSERT INTO catalogs VALUES (DEFAULT, 'Видеокарты');
+ 
+ INSERT INTO catalogs VALUES
+     (DEFAULT, 'Процессоры'),
+     (DEFAULT, 'Мат. платы'),
+     (DEFAULT, 'Видеокарты');*/
+ 
+
+INSERT INTO catalogs (name) VALUES
     ('Процессоры'),
     ('Мат. платы'),
     ('Видеокарты');
+
+/*INSERT IGNORE INTO catalogs (name) VALUES
+    ('Процессоры'),
+    ('Мат. платы'),
+    ('Видеокарты'),
+    ('Видеокарты');*/
+
+-- SELECT id, name FROM catalogs;
+-- SELECT * FROM catalogs;
+
+-- DELETE FROM catalogs;
+-- DELETE FROM catalogs LIMIT 2;
+-- DELETE FROM catalogs WHERE id > 1 LIMIT 1;
+
+-- truncate catalogs;
+
+UPDATE catalogs
+    SET name = 'Процессоры (Intel)'
+    WHERE name = 'Процессоры';
 
 INSERT INTO catalogs (name) VALUES
     ('Жесткие диски'),
