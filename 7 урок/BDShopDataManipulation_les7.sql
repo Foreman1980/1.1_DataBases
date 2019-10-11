@@ -71,3 +71,21 @@ VALUES
     ('Светлана', '1988-02-04'),
     ('Олег', '1998-03-20'),
     ('Юлия', '2006-07-12');
+
+-- Урок № 7 - начало
+truncate orders;
+INSERT INTO orders(user_id)
+VALUES (1), (3), (5), (7), (5), (7);
+
+truncate orders_products;
+INSERT INTO orders_products(order_id, product_id, total)
+VALUES
+    (1, 1, 1),
+    (1, 5, 1),
+    (2, 2, 1),
+    (2, 7, 1),
+    (3, 6, 1),
+    (4, 7, 1),
+    (5, 3, 1),
+    (6, 3, 1);
+-- Урок № 7 - конец
