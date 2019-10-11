@@ -27,13 +27,56 @@ FROM products;
 /* 3. Пусть имеется таблица рейсов flights (id, from, to) и таблица городов cities (label,
  * name). Поля from, to и label содержат английские названия городов, поле name — русское.
  * Выведите список рейсов flights с русскими названиями городов.*/
+DROP DATABASE IF EXISTS examples;
+CREATE DATABASE examples;
 
+USE examples;
 
+DROP TABLE IF EXISTS flights;
+CREATE TABLE flights(
+    id serial,
+    city_from varchar(255),
+    city_to varchar(255),
+    
+    PRIMARY KEY (id)
+);
 
+DROP TABLE IF EXISTS cities;
+CREATE TABLE cities(
+    id serial,
+    label varchar(255),
+    name varchar(255),
+    
+    PRIMARY KEY (id)
+);
 
+INSERT INTO flights(city_from, city_to)
+VALUES
+    ('moscow', 'omsk'),
+    ('novgorod', 'kazan'),
+    ('irkutsk', 'moscow'),
+    ('omsk', 'irkutsk'),
+    ('moscow', 'kazan');
 
+INSERT INTO cities(label, name)
+VALUES
+    ('moscow', 'Москва'),
+    ('irkutsk', 'Иркутск'),
+    ('novgorod', 'Новгород'),
+    ('kazan', 'Казань'),
+    ('omsk', 'Омск');
 
+SELECT *
+FROM flights;
 
+SELECT *
+FROM cities;
 
-
-
+SELECT
+    (   SELECT cities.name
+        FROM cities
+        WHERE cities.label = flights.city_from) AS 'Город отправления',
+    (   SELECT cities.name
+        FROM cities
+        WHERE cities.label = flights.city_to) AS 'Город прибытия'
+FROM flights;
