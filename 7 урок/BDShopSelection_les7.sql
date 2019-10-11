@@ -244,8 +244,11 @@ FROM catalogs JOIN products
 ON catalogs.id = products.catalog_id
 WHERE catalogs.name LIKE 'мат%';
 
-
-
+/*----------Модуль № 4 - Внешние ключи и ссылочная целостность----------*/
+-- Содержание:
+-- Ограничение внешнего ключа
+-- Нарушение ссылочной целостности
+-- Ключевое слово FOREIGN KEY
 
 
 

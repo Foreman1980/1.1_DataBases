@@ -54,21 +54,3 @@ FROM tbl1 JOIN tbl2;
 -- таблицам можно назначить псевдонимы:
 SELECT t1.value, t2.value
 FROM tbl1 AS t1 JOIN tbl2 AS t2;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
