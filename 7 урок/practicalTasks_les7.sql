@@ -2,12 +2,17 @@
 
 /* 1. Составьте список пользователей users, которые осуществили хотя бы один заказ orders
  * в интернет магазине.*/
+-- Вариант 1
+SELECT id, name
+FROM users
+WHERE id IN (   SELECT user_id
+                FROM orders);
 
-
-
-
-
-
+-- Вариант 2
+SELECT users.id, users.name
+FROM users JOIN orders
+ON users.id = orders.user_id
+GROUP BY users.id;
 
 /* 2. Выведите список товаров products и разделов catalogs, который соответствует товару.*/
 
