@@ -72,11 +72,6 @@ CREATE TABLE orders(
     KEY index_of_user_id(user_id)
 ) comment = 'Заказы';
 
--- Урок № 7 - начало
-ALTER TABLE orders
-CHANGE id id serial;
--- Урок № 7 - конец
-
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products(
 	id serial,
@@ -128,5 +123,61 @@ CREATE TABLE storehouses_products(
     
     PRIMARY KEY(id)
 ) comment = 'Запасы на складе';
+
+-- Урок № 7 - начало
+ALTER TABLE orders
+CHANGE id id serial;
+
+-- CONSTRAINT fk_... FOREIGN KEY (col1,...) REFERENCES tbl (tbl_col1,...)
+-- fk_...          - имя внешнего ключа (можно не указывать, тогда присвоится автоматически) 
+-- (col1,...)      - столбцы таблицы, играющие роль внешнего ключа
+-- tbl             - имя таблицы предка
+-- (tbl_col1,...)  - столбцы таблицы предка, играющие роль первичного ключа
+-- 
+-- [ON DELETE...]  - действие при удалении
+-- [ON UPDATE...]  - действие при обновлении
+-- 
+-- CASCADE         - каскадное удаление/обновление
+-- SET NULL        - установить NULL
+-- NO ACTION       - нет действий
+-- RESTRICT        - запрет удаления/обновления (будет ошибка)
+-- SET DEFAULT     - установить значение по-умолчанию для столбца
+
+-- SHOW CREATE TABLE products; -- в терминале просмотр скрипта по созданию таблицы products
+
+ALTER TABLE products
+CHANGE catalog_id catalog_id bigint UNSIGNED DEFAULT NULL;
+
+ALTER TABLE products
+ADD
+    CONSTRAINT fk_catalog_id
+    FOREIGN KEY (catalog_id)
+    REFERENCES catalogs (id)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE;
+
+-- ALTER TABLE products
+-- DROP FOREIGN KEY fk_catalog_id;
+
+-- Урок № 7 - конец
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
