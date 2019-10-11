@@ -8,7 +8,7 @@ SHOW DATABASES;
 DROP DATABASE IF EXISTS examples;
 CREATE DATABASE examples;
 
-USE example;
+USE examples;
 
 SHOW tables;
 
