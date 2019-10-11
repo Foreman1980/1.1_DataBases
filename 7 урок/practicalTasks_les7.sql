@@ -66,12 +66,6 @@ VALUES
     ('kazan', 'Казань'),
     ('omsk', 'Омск');
 
-SELECT *
-FROM flights;
-
-SELECT *
-FROM cities;
-
 SELECT
     (   SELECT cities.name
         FROM cities
