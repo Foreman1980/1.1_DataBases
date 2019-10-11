@@ -232,17 +232,17 @@ ON c.id = p.catalog_id;
 -- многотабличные запросы можно использовать не только для извлечения, но и для обновления и удаления данных
 /*----------------Снизим цену на 10% для материнских плат----------------*/
 -- Шаг 1
-UPDATE catalogs JOIN products
-ON catalogs.id = products.catalog_id
-SET price = price * 0.9
-WHERE catalogs.name LIKE 'мат%';
+-- UPDATE catalogs JOIN products
+-- ON catalogs.id = products.catalog_id
+-- SET price = price * 0.9
+-- WHERE catalogs.name LIKE 'мат%';
 
 /*----------------Снизим цену на 10% для материнских плат----------------*/
 -- Шаг 1 - здесь нужно явно указывать из каких таблиц нужно удалить записи
-DELETE catalogs, products
-FROM catalogs JOIN products
-ON catalogs.id = products.catalog_id
-WHERE catalogs.name LIKE 'мат%';
+-- DELETE catalogs, products
+-- FROM catalogs JOIN products
+-- ON catalogs.id = products.catalog_id
+-- WHERE catalogs.name LIKE 'мат%';
 
 /*----------Модуль № 4 - Внешние ключи и ссылочная целостность----------*/
 -- Содержание:
