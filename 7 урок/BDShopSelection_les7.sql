@@ -180,6 +180,74 @@ FROM (  SELECT min(price) AS price
 -- Многотабличные обновления
 -- Многотабличные удаления
 
+/*---------------Объединим таблицы "catalogs" и "products"---------------*/
+-- Шаг 1
+SELECT p.name, p.price, c.name
+FROM catalogs AS c JOIN products AS p;
+
+-- Шаг 2
+SELECT p.name, p.price, c.name
+FROM catalogs AS c JOIN products AS p
+WHERE c.id = p.catalog_id;
+
+-- Шаг 3
+SELECT p.name, p.price, c.name
+FROM catalogs AS c JOIN products AS p
+ON c.id = p.catalog_id;
+-- "ON"-условие срабатывает в момент соединения, т.е. результирующая таблица сразу получается небольшой, в то время как
+-- "WHERE"-условие всегда действует после соединения, т.е. сначала получается промежуточная таблица с декартовым
+-- произведением исходных таблиц и лишь затем осуществляется фильтрация
+
+/*---------------Объединим таблицу "catalogs" саму с собой---------------*/
+-- Шаг 1
+SELECT *
+FROM catalogs AS fst JOIN catalogs AS snd;
+-- такие запросы называются самообъединением таблиц
+
+-- Щаг 2 - давайте избавимся от повторов
+SELECT *
+FROM catalogs AS fst JOIN catalogs AS snd
+ON fst.id = snd.id;
+-- в случае, если названия столбцов в "ON"-условии совпадают, можно использовать ключевое слово "USING"
+SELECT *
+FROM catalogs AS fst JOIN catalogs AS snd
+USING(id);
+
+/*Рассмотрим соединение "LEFT JOIN" на примере табл. "catalogs" и "products"*/
+-- Шаг 1
+SELECT p.name, p.price, c.name
+FROM catalogs AS c JOIN products AS p
+ON c.id = p.catalog_id;
+
+-- Шаг 2 - Используем "LEFT JOIN"
+SELECT p.name, p.price, c.name
+FROM catalogs AS c LEFT JOIN products AS p
+ON c.id = p.catalog_id;
+
+-- Шаг 3 - Используем "RIGHT JOIN"
+SELECT p.id, p.name, p.price, c.name
+FROM products AS p RIGHT JOIN catalogs AS c
+ON c.id = p.catalog_id;
+
+-- многотабличные запросы можно использовать не только для извлечения, но и для обновления и удаления данных
+/*----------------Снизим цену на 10% для материнских плат----------------*/
+-- Шаг 1
+UPDATE catalogs JOIN products
+ON catalogs.id = products.catalog_id
+SET price = price * 0.9
+WHERE catalogs.name LIKE 'мат%';
+
+/*----------------Снизим цену на 10% для материнских плат----------------*/
+-- Шаг 1 - здесь нужно явно указывать из каких таблиц нужно удалить записи
+DELETE catalogs, products
+FROM catalogs JOIN products
+ON catalogs.id = products.catalog_id
+WHERE catalogs.name LIKE 'мат%';
+
+
+
+
+
 
 
 
