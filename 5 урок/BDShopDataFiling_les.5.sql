@@ -2,6 +2,21 @@
 
 USE shop;
 
+truncate catalogs;
+INSERT INTO catalogs (name)
+VALUES
+    ('Процессоры'),
+    ('Мат. платы'),
+    ('Видеокарты');
+
+INSERT INTO catalogs (name) VALUES
+    ('Жесткие диски'),
+    ('Оперативная память');
+
+UPDATE catalogs
+    SET name = 'Материнские платы'
+    WHERE name = 'Мат. платы';
+
 truncate users;
 INSERT INTO users (name, birthday_at)
 VALUES
