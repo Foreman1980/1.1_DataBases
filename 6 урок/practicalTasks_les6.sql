@@ -31,9 +31,7 @@ UPDATE messages
 SET from_user_id = IF(from_user_id = to_user_id, floor(1 + rand()*100), from_user_id);
 
 -- Шаг 2 - определим пользователя, который чаще всего писал пользователю с id = 3
-SELECT
-    from_user_id,
-    count(*)
+SELECT from_user_id, count(*)
 FROM messages
 WHERE to_user_id = 3
 GROUP BY from_user_id
