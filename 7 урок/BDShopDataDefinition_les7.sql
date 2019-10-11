@@ -72,6 +72,11 @@ CREATE TABLE orders(
     KEY index_of_user_id(user_id)
 ) comment = 'Заказы';
 
+-- Урок № 7 - начало
+ALTER TABLE orders
+CHANGE id id serial;
+-- Урок № 7 - конец
+
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products(
 	id serial,
