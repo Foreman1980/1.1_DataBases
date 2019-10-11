@@ -1,4 +1,5 @@
 -- Заполнение данными БД "shop" по материалам урока № 5
+-- С учётом урока № 7
 
 USE shop;
 
@@ -15,7 +16,7 @@ truncate catalogs;
 
 INSERT INTO catalogs (name) VALUES
     ('Процессоры'),
-    ('Мат. платы'),
+    ('Материнские платы'),
     ('Видеокарты');
 
 /*INSERT IGNORE INTO catalogs (name) VALUES
@@ -33,13 +34,13 @@ INSERT INTO catalogs (name) VALUES
 
 -- truncate catalogs;
 
-UPDATE catalogs
-    SET name = 'Процессоры (Intel)'
-    WHERE name = 'Процессоры';
+-- UPDATE catalogs
+--     SET name = 'Процессоры (Intel)'
+--     WHERE name = 'Процессоры';
 
-INSERT INTO catalogs (name) VALUES
-    ('Жесткие диски'),
-    ('Оперативная память');
+-- INSERT INTO catalogs (name) VALUES
+--     ('Жесткие диски'),
+--     ('Оперативная память');
 
 UPDATE catalogs
     SET name = 'Материнские платы'
