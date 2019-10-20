@@ -180,4 +180,9 @@ VALUES
     (2, 200.00),
     (NULL, 25000.00);
 
+-- DROP DATABASE IF EXISTS sample;
+-- CREATE DATABASE sample;
+-- 
+-- USE sample;
+
 -- Урок № 9 - конец
