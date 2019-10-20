@@ -94,15 +94,3 @@ WITH CHECK OPTION;
 -- эти две команды эквивалентны
 
 DROP VIEW IF EXISTS v1;
-
-
-
-
-
-
-
-
-
-
-
-
