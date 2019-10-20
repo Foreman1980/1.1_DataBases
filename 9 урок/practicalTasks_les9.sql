@@ -67,7 +67,6 @@ DROP VIEW IF EXISTS prod;
  * дат за август, выставляя в соседнем поле значение 1, если дата присутствует в исходном таблице и 0, если она
  * отсутствует.*/
 
-
 DROP TABLE IF EXISTS dates;
 CREATE TABLE dates(
     created_at date
