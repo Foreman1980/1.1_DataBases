@@ -552,19 +552,86 @@ SET @y = 10000;
 CALL set_x(@y);
 SELECT @x, @y;
 
+# локальные переменные
 
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE declare_var()
+-- BEGIN
+--     DECLARE id, num int(11) DEFAULT 0;
+--     DECLARE name, hello, temp TINYTEXT;
+-- END//
+-- DELIMITER ;
 
+-- Команда "DECLARE" может появляться только внутри блока "BEGIN...END", область видимости переменных также ограничена
+-- этим блоком. Это означает, что в разных блоках "BEGIN...END" могут быть объявлены переменные с одинаковым именем и
+-- действовать они будут только в рамках данного блока, не пересекаясь с переменными других блоков. Однако переменная,
+-- объявленные во внешнем блоке "BEGIN...END" будет доступна и во вложенном блоке
 
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE declare_var()
+-- BEGIN
+--     DECLARE var TINYTEXT DEFAULT 'внешняя переменная';
+--     BEGIN
+--         DECLARE var TINYTEXT DEFAULT 'внутренняя переменная';
+--         SELECT var;
+--     END;
+--     SELECT var;
+-- END//
+-- DELIMITER ;
 
+-- кроме ключевого слова "DEFAULT", которое позволяет присваивать значение переменной при её объявлении, существует ещё
+-- два способа инициализации переменных. Инициализация переменных:
+-- SET
+-- SELECT...INTO...FROM - специальный синтаксис команды селект
 
+-- Использование команды SET
+SET @var = 100;
+SET @var = @var + 1;
+ 
+-- Использование команды SELECT...INTO
+-- SELECT
+--     id, `data`
+-- INTO
+--     @x, @y
+-- FROM test;
 
+-- Пример использования команды "SET":
+-- Создание функции см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE FUNCTION second_format (seconds int)
+-- RETURNS varchar(255) DETERMINISTIC
+-- BEGIN
+--     DECLARE days, hours, minutes int;
+-- 
+--     SET days = floor(seconds / 86400);
+--     SET seconds = seconds - days * 86400;
+--     SET hours = floor(seconds / 3600);
+--     SET seconds = seconds - hours * 3600;
+--     SET minutes = floor(seconds / 60);
+--     SET seconds = seconds - minutes * 60;
+-- 
+--     RETURN concat(  days, ' days ',
+--                     hours, ' hours ',
+--                     minutes, ' minutes ',
+--                     seconds, ' seconds ');
+-- END//
+-- DELIMITER ;
 
+-- Пример использовани команды "SELECT...INTO":
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE numcatalogs(OUT total int)
+-- BEGIN
+--     SELECT count(*) INTO total FROM catalogs;
+-- END//
+-- DELIMITER ;
 
+CALL numcatalogs(@a);
+SELECT @a;
 
-
-
-
-
+-- Оператор "IF" позволяет реализовать ветвление программ по условию - 15:23
 
 
 
