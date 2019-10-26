@@ -631,20 +631,286 @@ SET @var = @var + 1;
 CALL numcatalogs(@a);
 SELECT @a;
 
--- Оператор "IF" позволяет реализовать ветвление программ по условию - 15:23
+-- Оператор "IF" позволяет реализовать ветвление программ по условию
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE format_date(format char(4))
+-- BEGIN
+--     IF (format = 'date') THEN
+--         SELECT date_format(now(), '%d.%m.%Y') AS format_now;
+--     END IF;
+--     IF (format = 'time') THEN
+--         SELECT date_format(now(), '%H:%i:%s') AS format_now;
+--     END IF;
+-- END//
+-- DELIMITER ;
 
+CALL format_date('date');
+CALL format_date('time');
 
+-- Конструкция "IF...ELSE"
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE format_date(format char(4))
+-- BEGIN
+--     IF (format = 'date') THEN
+--         SELECT date_format(now(), '%d.%m.%Y') AS format_now;
+--     ELSE
+--         SELECT date_format(now(), '%H:%i:%s') AS format_now;
+--     END IF;
+-- END//
+-- DELIMITER ;
 
+CALL format_date('date');
+CALL format_date('tttt');
 
+-- Конструкция "IF...ELSEIF...ELSE"
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE format_date(format char(4))
+-- BEGIN
+--     IF (format = 'date') THEN
+--         SELECT date_format(now(), '%d.%m.%Y') AS format_now;
+--     ELSEIF (format = 'time') THEN
+--         SELECT date_format(now(), '%H:%i:%s') AS format_now;
+--     ELSE
+--         SELECT unix_timestamp(now()) AS format_now;
+--     END IF;
+-- END//
+-- DELIMITER ;
+
+CALL format_date('date');
+CALL format_date('time');
+CALL format_date('secs');
+
+-- Для множественного выбора в MySQL предназначен оператор "CASE"
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE format_date(format char(4))
+-- BEGIN
+--     CASE format
+--         WHEN 'date' THEN
+--             SELECT date_format(now(), '%d.%m.%Y') AS format_now;
+--         WHEN 'time' THEN
+--             SELECT date_format(now(), '%H:%i:%s') AS format_now;
+--         WHEN 'secs' THEN
+--             SELECT unix_timestamp(now()) AS format_now;
+--         ELSE
+--             SELECT 'Ошибка в параметре format';
+--     END CASE;
+-- END//
+-- DELIMITER ;
+
+CALL format_date('date');
+CALL format_date('time');
+CALL format_date('secs');
+CALL format_date('ssss');
 
 /*----------------------------------Модуль № 3 - Циклы и курсоры----------------------------------*/
 -- План занятия:
--- Транзакции
--- Ключевые слова COMMIT и ROLLBACK
--- Точки сохранения
--- Режим автозавершения транзакций
--- Принцип ACID
--- Уровни изоляции
+-- Циклы
+-- Досрочный выход из циклов
+-- Обработчики ошибок
+-- Курсоры
+
+-- Циклы:
+-- WHILE
+-- REPEAT
+-- LOOP
+
+-- Оператор цикла "WHILE"
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE now3()
+-- BEGIN
+--     DECLARE i int DEFAULT 3;
+--     WHILE i > 0 do
+--         SELECT now();
+--         SET i = i - 1;
+--     END WHILE;
+-- END//
+-- DELIMITER ;
+
+CALL now3;
+
+-- количество повторов не обязательно задавать внутри хранимой процедуры, например мы можем задать его в качестве
+-- входящего параметра
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql"
+-- DELIMITER //
+-- CREATE PROCEDURE nowN(IN num int)
+-- BEGIN
+--     DECLARE i int DEFAULT 0;
+--     IF (num > 0) THEN
+--         WHILE i < num do
+--             SELECT now();
+--             SET i = i + 1;
+--         END WHILE;
+--     ELSE
+--         SELECT 'Ошибочное значение параметра';
+--     END IF;
+-- END//
+-- DELIMITER ;
+
+CALL `nowN`(2);
+
+-- Для досрочного выхода из цикла предназначен оператор "LEAVE"
+-- Давайте ограничим цикл в процедуре "nowN()" только двумя итерациями, т.е. какое бы значение пользователь не
+-- закладывал, максимальное количество, которое будет доступно это вывод двух дат
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 312)
+-- DELIMITER //
+-- CREATE PROCEDURE nowN(IN num int)
+-- BEGIN
+--     DECLARE i int DEFAULT 0;
+--     IF (num > 0) THEN
+--         circle: WHILE i < num do
+--             IF i >= 2 THEN LEAVE circle;
+--             END IF;
+--             SELECT now();
+--             SET i = i + 1;
+--         END WHILE circle;
+--     ELSE
+--         SELECT 'Ошибочное значение параметра';
+--     END IF;
+-- END//
+-- DELIMITER ;
+
+CALL `nowN`(1000);
+
+-- Ещё одним оператором осуществляющим досрочное прекращение цикла является оператор "ITERATE", в отличии от оператора
+-- "LEAVE" оператор "ITERATE" не полностью прекращает выполнение цикла, а лишь выполняет досрочное прекращение текущей
+-- итерации
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 334)
+-- DELIMITER //
+-- CREATE PROCEDURE numbers_string(IN num int)
+-- BEGIN
+--     DECLARE i int DEFAULT 0;
+--     DECLARE bin TINYTEXT DEFAULT '';
+--     IF (num > 0) THEN
+--         circle: WHILE i < num do
+--             SET i = i + 1;
+--             SET bin = concat(bin, i);
+--             IF i > CEILING(num / 2) THEN ITERATE circle;
+--             END IF;
+--             SET bin = concat(bin, i);
+--         END WHILE circle;
+--         SELECT bin;
+--     ELSE
+--         SELECT 'Ошибочное значение параметра';
+--     END IF;
+-- END//
+-- DELIMITER ;
+
+CALL numbers_string(9);
+
+-- Оператор цикла "REPEAT"
+-- Оператор "REPEAT" похож на оператор "WHILE", однако условие для покидания цикла располагается не в начале тела
+-- цикла, а в конце. В результате тело цикла в любом случае выполняется хотя бы один раз
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 359)
+-- DELIMITER //
+-- CREATE PROCEDURE now3()
+-- BEGIN
+--     DECLARE i int DEFAULT 3;
+--     REPEAT
+--         SELECT now();
+--         SET i = i - 1;
+--     until i <= 0
+--     END REPEAT;
+-- END//
+-- DELIMITER ;
+
+CALL now3();
+
+-- Цикл "LOOP" в отличии от операторов "WHILE" и "REPEAT" не имеет условия выхода, поэтому данный вид цикла всегда
+-- должен иметь в своём составе оператор "LEAVE"
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 376)
+-- DELIMITER //
+-- CREATE PROCEDURE now3()
+-- BEGIN
+--     DECLARE i int DEFAULT 3;
+--     circle: LOOP
+--         SELECT now();
+--         SET i = i - 1;
+--         IF i <= 0 THEN LEAVE circle;
+--         END IF;
+--     END LOOP circle;
+-- END//
+-- DELIMITER ;
+
+CALL now3();
+
+-- Обработчики ошибок
+
+-- Попробуем вставить в таблицу "catalogs" запись с идентификатором 1
+INSERT INTO catalogs VALUES(1, 'Процессоры');
+-- получили ошибку "SQL Error [1062] [23000]: Duplicate entry '1' for key 'PRIMARY'"
+-- Данную ошибку можно обработать с пом. конструкции "DECLARE...HANDLER FOR". Данная команда может появляться только
+-- в теле хранимых процедур и функций 
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 396)
+-- DELIMITER //
+-- CREATE PROCEDURE insert_to_catalog (IN id int, IN name varchar(255))
+-- BEGIN
+--     DECLARE CONTINUE handler FOR SQLSTATE '23000' SET @error = 'Ошибка вставки значения';
+--     INSERT INTO catalogs VALUES (id, name);
+--     IF @error IS NOT NULL THEN
+--         SELECT @error;
+--     END IF;
+-- END//
+-- DELIMITER ;
+
+CALL insert_to_catalog(1, 'Процессоры');
+
+-- Курсоры
+
+-- Если результирующий запрос возвращает одну запись, поместить результаты в локальную переменную можно при помощи
+-- конструкции "SELECT...INTO...FROM"
+-- DELIMITER //
+-- CREATE PROCEDURE catalog_id(OUT total int)
+-- BEGIN
+--     SELECT id INTO total FROM catalogs;
+-- END//
+-- DELIMITER ;
+-- однако результирующие таблицы чаще содержат несколько записей, тогда запрос "SELECT id INTO total FROM catalogs;"
+-- вызовет ошибку. Можно добавить "LIMIT 1" или назначить обработчик ошибок, но чаще всего нужно обработать именно
+-- многострочную результирующую таблицу. Решить эту задачу можно с помощью курсоров
+
+/*--------------Создадим копию таблицы catalogs с наименованиями в верхнем регистре--------------*/
+DROP TABLE IF EXISTS upcase_catalogs;
+CREATE TABLE upcase_catalogs(
+    id serial,
+    name VARCHAR(255) comment 'Название раздела',
+    
+    PRIMARY KEY(id),
+    UNIQUE unique_name(name(10))
+) comment = 'Разделы интернет-магазина';
+
+-- Создание процедуры см. в файле "BDShopFunction_les9.sql" (строка 412)
+-- DELIMITER //
+-- CREATE PROCEDURE copy_catalogs ()
+-- BEGIN
+--     DECLARE id int;
+--     DECLARE is_end int DEFAULT 0;
+--     DECLARE name TINYTEXT;
+-- 
+--     DECLARE curcat CURSOR FOR SELECT * FROM catalogs;
+--     DECLARE CONTINUE handler FOR NOT FOUND SET is_end = 1;
+-- 
+--     OPEN curcat;
+--     
+--     circle: LOOP
+--         FETCH curcat INTO id, name;
+--         IF is_end THEN LEAVE circle;
+--         END IF;
+--         INSERT INTO upcase_catalogs VALUES (id, upper(name));
+--     END LOOP circle;
+-- 
+--     CLOSE curcat;    
+-- 
+-- END//
+-- DELIMITER ;
+
+CALL copy_catalogs();
+
+SELECT * FROM upcase_catalogs;
 
 /*-------------------------------------Модуль № 4 - Триггеры-------------------------------------*/
 -- План занятия:
@@ -654,3 +920,42 @@ SELECT @a;
 -- Режим автозавершения транзакций
 -- Принцип ACID
 -- Уровни изоляции
+
+-- Пример использования триггера из документации MySQL (https://dev.mysql.com/doc/refman/8.0/en/trigger-syntax.html)
+-- CREATE TABLE test1(a1 INT);
+-- 
+-- CREATE TABLE test4(
+--   a4 INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--   b4 INT DEFAULT 0
+-- );
+-- 
+-- delimiter |
+-- 
+-- CREATE TRIGGER testref AFTER INSERT ON test1
+--   FOR EACH ROW
+--   BEGIN
+--     UPDATE test4 SET b4 = b4 + 1 WHERE a4 = NEW.a1;
+--   END;
+-- |
+-- 
+-- delimiter ;
+-- 
+-- truncate test4;
+-- INSERT INTO test4 (a4) VALUES
+--   (0), (0), (0), (0), (0), (0), (0), (0), (0), (0);
+--   
+-- SELECT * FROM test1;
+-- SELECT * FROM test4;
+-- 
+-- truncate test1;
+-- INSERT INTO test1 VALUES 
+--        (1), (3), (1), (7), (1), (8), (4), (4);
+--  
+-- SELECT * FROM test1;
+-- SELECT * FROM test4;
+-- 
+-- DROP TRIGGER testref;
+-- DROP TABLE test1;
+-- DROP TABLE test4;
+-- 
+-- SHOW triggers;
