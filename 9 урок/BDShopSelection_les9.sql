@@ -911,6 +911,7 @@ CREATE TABLE upcase_catalogs(
 CALL copy_catalogs();
 
 SELECT * FROM upcase_catalogs;
+DROP TABLE IF EXISTS upcase_catalogs;
 
 /*-------------------------------------Модуль № 4 - Триггеры-------------------------------------*/
 -- План занятия:
