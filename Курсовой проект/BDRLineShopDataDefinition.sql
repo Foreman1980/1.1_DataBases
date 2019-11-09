@@ -19,6 +19,7 @@ CREATE TABLE clients(
     is_deleted bit(1) NOT NULL DEFAULT b'0',
        
     PRIMARY KEY (id)
+    -- добавить внешний ключ по диск. карте
 ) comment 'Карточка клиента. Формируется при подтверждении и/или оплате заказа.';
 
 DROP TABLE IF EXISTS units;
@@ -102,26 +103,105 @@ CREATE TABLE products(
     PRIMARY KEY (id)
 ) comment 'Карточка товара.';
 
--- DROP TABLE IF EXISTS orders;
--- CREATE TABLE orders(
---     id serial,
---     user_id bigint NOT NULL,
---     created_at datetime DEFAULT CURRENT_TIMESTAMP,
---     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---        
---     PRIMARY KEY (id)
--- );
--- 
--- DROP TABLE IF EXISTS orders_products;
--- CREATE TABLE orders_products(
---     id serial,
---     orders_id bigint NOT NULL,
---     
---     created_at datetime DEFAULT CURRENT_TIMESTAMP,
---     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---        
---     PRIMARY KEY (id)
--- );
+DROP TABLE IF EXISTS product_photos;
+CREATE TABLE product_photos(
+    id serial,
+    product_id bigint unsigned NOT NULL,
+    -- добавить внешние ключи по таре и развесовке
+    file_name varchar(255),
+       
+    PRIMARY KEY (id)
+    -- индекс по product_id и таре/развесовке
+) comment 'Фотографии товара.';
+
+DROP TABLE IF EXISTS discount_card;
+CREATE TABLE discount_card(
+    id serial,
+    barcode varchar(13) NOT NULL,
+    summ decimal(10,2),
+    is_deleted bit(1) NOT NULL DEFAULT b'0',
+       
+    PRIMARY KEY (id)
+    -- добавить индекс по баркоду карты
+) comment 'Дисконтная карта и накопленная сумма скидки.';
+
+DROP TABLE IF EXISTS storehouses;
+CREATE TABLE storehouses(
+    id int unsigned NOT NULL AUTO_INCREMENT,
+    name varchar(100) NOT NULL,
+    description varchar(255),
+       
+    PRIMARY KEY (id)
+) comment 'Перечень складов.';
+
+INSERT INTO storehouses(name, description) VALUES
+    ('main_warehouse', 'Основной склад'),
+    ('retail_warehouse', 'Розничный склад'),
+    ('custodyhouse', 'Склад ответственного хранения');
+
+DROP TABLE IF EXISTS storehouses_products;
+CREATE TABLE storehouses_products(
+  id serial,
+  storehouse_id int unsigned NOT NULL DEFAULT 1,
+  product_id bigint unsigned NOT NULL,
+  value int unsigned NOT NULL COMMENT 'Запас товарной позиции на складе',
+  created_at datetime DEFAULT CURRENT_TIMESTAMP,
+  updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  is_deleted bit(1) NOT NULL DEFAULT b'0',
+       
+    PRIMARY KEY (id)
+) comment 'Запасы на складе.';
+
+DROP TABLE IF EXISTS price_lists;
+CREATE TABLE price_lists(
+    id bigint unsigned NOT NULL AUTO_INCREMENT,
+    name varchar(100) NOT NULL,
+    description varchar(255),
+       
+    PRIMARY KEY (id)
+) comment 'Прайс-листы.';
+
+INSERT INTO price_lists(name, description) VALUES
+    ('wholesale', 'Оптовый прайс-лист'),
+    ('retail', 'Розничный прайс-лист'),
+    ('selling', 'Прайс-лист под реализацию');
+
+DROP TABLE IF EXISTS promo_codes;
+CREATE TABLE promo_codes(
+    id serial,
+    promo_code varchar(7) NOT NULL,
+    discount_card_id bigint NOT NULL,
+    summ decimal(10,2),
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
+    activated_at datetime DEFAULT NULL,
+       
+    PRIMARY KEY (id)
+) comment 'Прайс-листы.';
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders(
+    id serial,
+    storehouse_id int unsigned NOT NULL
+    client_id bigint DEFAULT NULL,
+    created_at datetime DEFAULT CURRENT_TIMESTAMP,
+    updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    executed_at datetime,
+    paid_at datetime,
+    is_deleted bit(1) NOT NULL DEFAULT b'0',
+       
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS orders_products;
+CREATE TABLE orders_products(
+    id serial,
+    orders_id bigint NOT NULL,
+    storehouses_product_id int unsigned NOT NULL,
+    value int unsigned NOT NULL,
+        
+    PRIMARY KEY (id)
+    -- добавить внешний ключ orders_id
+) comment 'Состав заказа/покупки.';
 
 
 
