@@ -2,7 +2,7 @@
 
 USE rlineshop;
 
-truncate discount_card;
+-- truncate discount_card;
 INSERT INTO discount_card(barcode) VALUES
     ('7000000000010'),
     ('7000000000027'),
@@ -56,7 +56,7 @@ INSERT INTO discount_card(barcode) VALUES
     ('7000000000508')
 ;
 
-truncate categories;
+-- truncate categories;
 INSERT INTO categories(id, name) VALUES
     (1, 'Протеины'),
     (2, 'Гейнеры'),
@@ -66,7 +66,7 @@ INSERT INTO categories(id, name) VALUES
     (6, 'Аксессуары')
 ;
 
-truncate products;
+-- truncate products;
 INSERT INTO products(id, category_id, name, short_description, full_description, other_nutrients, recommendations, serving_size_gramm, energy_per_serv_kсal, link) VALUES
     (1, 1, 'Total Complex',
     'Мультикомпонентный протеиновый коктейль на основе трех видов белка. Позволяет на протяжении 6-8 часов удерживать высокий уровень анаболического процесса и препятствовать катаболическому. Обеспечивает постоянное поступление в кровь аминокислот. Делает процесс синтеза мышечного белка непрерывным. Идеален для тех случаев, когда между приемами пищи возникают перерывы более 2-3 часов. Или для употребления перед сном.',
@@ -129,14 +129,14 @@ INSERT INTO products(id, category_id, name, short_description, full_description,
     42, 177, 'http://rlinesport.ru/power-whey-900')
 ;
 
-truncate certificates;
+-- truncate certificates;
 INSERT INTO certificates(id, file_name, link, short_description) VALUES
     (1, 'certificate.pdf', NULL, 'Сухие смеси для коктейлей: протеины, гейнеры, изотоники. Страница 1 из 2.'),
     (2, 'certificate_addition.pdf', NULL, 'Сухие смеси для коктейлей: протеины, гейнеры, изотоники. Страница 2 из 2.')
   
 ;
 
-truncate product_certificate;
+-- truncate product_certificate;
 INSERT INTO product_certificate(product_id, certificate_id) VALUES
     (1, 1),
     (1, 2),
@@ -144,20 +144,20 @@ INSERT INTO product_certificate(product_id, certificate_id) VALUES
     (2, 1)
 ;
 
-truncate units;
+-- truncate units;
 INSERT INTO units(id, abbreviation, full_name, si_units_value, si_units_abbreviation, short_description) VALUES
     (1, 'г', 'грамм', 0.001, 'кг', 'Масса'),
     (2, 'мг', 'миллиграмм', 0.000001, 'кг', 'Масса')
 ;
 
-truncate nutrients;
+-- truncate nutrients;
 INSERT INTO nutrients(id, name, alter_name, short_description, daily_value, units_id) VALUES
     (1, 'Белок', 'Протеин', NULL, NULL, 1),
     (2, 'Углеводы', NULL, NULL, NULL, 1),
     (3, 'Жиры', NULL, NULL, NULL, 1)
 ;
 
-truncate nutrient_compositions;
+-- truncate nutrient_compositions;
 INSERT INTO nutrient_compositions(product_id, nutrient_id, value) VALUES
     (1, 1, 31),
     (1, 2, 3.5),
@@ -167,7 +167,7 @@ INSERT INTO nutrient_compositions(product_id, nutrient_id, value) VALUES
     (2, 3, 4.1)
 ;
 
-truncate amino_acids;
+-- truncate amino_acids;
 INSERT INTO amino_acids(id, name, alter_name, short_description, daily_value, units_id) VALUES
     (1, 'Валин (BCAA)', '2-амино-3-метилбутановая кислота', 'Алифатическая α-аминокислота одна из 20 протеиногенных аминокислот, входит в состав практически всех известных белков. Названо в честь растения валерианы. Химическая формула: C5H11NO2. Один из главных компонентов в росте и синтезе тканей тела. Вместе с лейцином и изолейцином служит источником энергии в мышечных клетках, а также препятствует снижению уровня серотонина. Опыты на лабораторных крысах показали, что валин повышает мышечную координацию и понижает чувствительность организма к боли, холоду и жаре и т.д.', NULL, 2),
     (2, 'Изолейцин (BCAA)', '2-амино-3-метилпентановая кислота', 'Это алифатическая α-аминокислота, имеющая химическую формулу HO2CCHCHCH2CH3 и входящая в состав всех природных белков. Является незаменимой аминокислотой, что означает, что изолейцин не может синтезироваться в организме человека и должен поступать в него с пищей. Участвует в энергетическом обмене. При недостаточности ферментов, катализирующих декарбоксилирование изолейцина, возникает кетоацидоз. Как и другие незаменимые аминокислоты, изолейцин не синтезируется в организмах животных, и должен поступать извне, обычно в составе белков. В растениях и микроорганизмах изолейцин синтезируется посредством нескольких стадий, начиная от пировиноградной кислоты и α-кетобутирата; процесс катализируется рядом ферментов.', NULL, 2),
@@ -190,7 +190,7 @@ INSERT INTO amino_acids(id, name, alter_name, short_description, daily_value, un
     (18, 'Аланин', 'Алифатическая α-аминокислота', 'Одна из 20 протеиногенных аминокислот, входит в состав практически всех известных белков. Названо в честь растения валерианы. Химическая формула: C5H11NO2', NULL, 2)
 ;
 
-truncate amino_acid_compositions;
+-- truncate amino_acid_compositions;
 INSERT INTO amino_acid_compositions(product_id, amino_acid_id, value) VALUES
     (1, 1, 1736),
     (1, 2, 1784),
@@ -230,7 +230,7 @@ INSERT INTO amino_acid_compositions(product_id, amino_acid_id, value) VALUES
     (2, 18, 1590)
 ;
 
-truncate vitamin_complex;
+-- truncate vitamin_complex;
 INSERT INTO vitamin_complex(id, name, alter_name, short_description, daily_value, units_id) VALUES
     (1, 'Витамин А', 'Ретинол', NULL, NULL, 2),
     (2, 'Витамин Е', 'Токоферол', NULL, NULL, 2),
@@ -243,7 +243,7 @@ INSERT INTO vitamin_complex(id, name, alter_name, short_description, daily_value
     (9, 'Витамин С', 'Аскорбиновая кислота', NULL, NULL, 2)
 ;
 
-truncate vitamin_complex_compositions;
+-- truncate vitamin_complex_compositions;
 INSERT INTO vitamin_complex_compositions(product_id, vitamin_complex_id, value) VALUES
     (1, 1, 0.26),
     (1, 2, 3.06),
@@ -256,7 +256,7 @@ INSERT INTO vitamin_complex_compositions(product_id, vitamin_complex_id, value) 
     (1, 9, 25.32)
 ;
 
-truncate product_photos;
+-- truncate product_photos;
 INSERT INTO product_photos(product_id, file_name) VALUES
     (1, 'total_complex_4000.png'),
     (1, 'total_complex_600_doy.png'),
@@ -271,7 +271,7 @@ INSERT INTO product_photos(product_id, file_name) VALUES
 
 -- Регистрацию новых клиентов реализовать транзакцией
 
-truncate storehouses;
+-- truncate storehouses;
 INSERT INTO storehouses(name, description) VALUES
     ('main_warehouse', 'Основной склад'),
     ('retail_warehouse', 'Розничный склад'),
@@ -284,7 +284,7 @@ INSERT INTO storehouses(name, description) VALUES
 -- 
 -- ;
 
-truncate price_lists;
+-- truncate price_lists;
 INSERT INTO price_lists(name, description) VALUES
     ('online store', 'Прайс-лист интернет-магазина'),
     ('retail', 'Розничный прайс-лист'),

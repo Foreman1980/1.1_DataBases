@@ -13,8 +13,8 @@ CREATE TABLE discount_card(
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     is_deleted bit(1) NOT NULL DEFAULT b'0',
        
-    PRIMARY KEY (id)
-    -- добавить индекс по баркоду карты
+    PRIMARY KEY (id),
+    INDEX discount_card_barcode_idx (barcode)
 ) comment 'Дисконтная карта и накопленная сумма скидки.';
 
 DROP TABLE IF EXISTS categories;
@@ -45,7 +45,9 @@ CREATE TABLE products(
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     is_deleted bit(1) NOT NULL DEFAULT b'0',
        
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    INDEX name_idx (name(10)),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 ) comment 'Карточка товара.';
 
 DROP TABLE IF EXISTS certificates;
@@ -69,7 +71,8 @@ CREATE TABLE product_certificate(
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
        
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
 ) comment 'Связь товара и сертификата качества либо декларацией соответствия.';
 
 DROP TABLE IF EXISTS units;
@@ -103,7 +106,9 @@ CREATE TABLE nutrient_compositions(
     nutrient_id bigint unsigned NOT NULL,
     value float UNSIGNED DEFAULT NULL,
            
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (nutrient_id) REFERENCES nutrients(id)
 ) comment 'Состав нутриентов в конкретном продукте.';
 
 DROP TABLE IF EXISTS amino_acids;
@@ -125,7 +130,9 @@ CREATE TABLE amino_acid_compositions(
     amino_acid_id bigint unsigned NOT NULL,
     value int UNSIGNED DEFAULT NULL,
            
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (amino_acid_id) REFERENCES amino_acids(id)
 ) comment 'Состав аминокислот в конкретном продукте.';
 
 DROP TABLE IF EXISTS vitamin_complex;
@@ -147,7 +154,9 @@ CREATE TABLE vitamin_complex_compositions(
     vitamin_complex_id bigint unsigned NOT NULL,
     value int UNSIGNED DEFAULT NULL,
            
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (vitamin_complex_id) REFERENCES vitamin_complex(id)
 ) comment 'Состав витаминно-минерального комплекса в конкретном продукте.';
 
 DROP TABLE IF EXISTS product_photos;
@@ -157,8 +166,9 @@ CREATE TABLE product_photos(
     -- добавить внешние ключи по таре и развесовке
     file_name varchar(255),
        
-    PRIMARY KEY (id)
-    -- индекс по product_id и таре/развесовке
+    PRIMARY KEY (id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+    -- индекс таре/развесовке
 ) comment 'Фотографии товара.';
 
 DROP TABLE IF EXISTS clients;
@@ -169,13 +179,19 @@ CREATE TABLE clients(
     email varchar(100) NOT NULL,
     vk_profile varchar(100) DEFAULT NULL,
     hometown varchar(100) NOT NULL,
-    discount_card_id bigint NOT NULL,
+    discount_card_id bigint UNSIGNED NOT NULL,
     registration datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     is_deleted bit(1) NOT NULL DEFAULT b'0',
        
-    PRIMARY KEY (id)
-    -- добавить внешний ключ по диск. карте
+    PRIMARY KEY (id),
+    INDEX clients_handle_idx (handle),
+    INDEX clients_phone_idx (phone),
+    INDEX clients_email_idx (email),
+    INDEX clients_vk_profile_idx (vk_profile),
+    INDEX clients_hometown_idx (hometown),
+    INDEX clients_discount_card_idx (discount_card_id),
+    FOREIGN KEY (discount_card_id) REFERENCES discount_card(id) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) comment 'Карточка клиента. Формируется при подтверждении и/или оплате заказа.';
 
 DROP TABLE IF EXISTS storehouses;
@@ -197,7 +213,9 @@ CREATE TABLE storehouses_products(
   updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   is_deleted bit(1) NOT NULL DEFAULT b'0',
        
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (storehouse_id) REFERENCES storehouses(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
 ) comment 'Запасы на складе.';
 
 DROP TABLE IF EXISTS price_lists;
@@ -213,12 +231,13 @@ DROP TABLE IF EXISTS promo_codes;
 CREATE TABLE promo_codes(
     id serial,
     promo_code varchar(7) NOT NULL,
-    discount_card_id bigint NOT NULL,
+    discount_card_id bigint UNSIGNED NOT NULL,
     summ decimal(10,2),
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     activated_at datetime DEFAULT NULL,
        
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (discount_card_id) REFERENCES discount_card(id)
 ) comment 'Промо-коды.';
 
 DROP TABLE IF EXISTS orders;
@@ -232,18 +251,21 @@ CREATE TABLE orders(
     paid_at datetime,
     is_deleted bit(1) NOT NULL DEFAULT b'0',
        
-    PRIMARY KEY (id)
-);
+    PRIMARY KEY (id),
+    FOREIGN KEY (storehouse_id) REFERENCES storehouses(id),
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+) comment 'Заказы.';
 
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products(
     id serial,
-    orders_id bigint NOT NULL,
-    storehouses_product_id int unsigned NOT NULL,
+    order_id bigint UNSIGNED NOT NULL,
+    storehouses_product_id bigint unsigned NOT NULL,
     value int unsigned NOT NULL,
         
-    PRIMARY KEY (id)
-    -- добавить внешний ключ orders_id
+    PRIMARY KEY (id),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (storehouses_product_id) REFERENCES storehouses_products(id)
 ) comment 'Состав заказа/покупки.';
 
 -- DROP TABLE IF EXISTS payments;
