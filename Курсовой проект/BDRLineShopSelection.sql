@@ -23,8 +23,8 @@ BEGIN
 END//
 DELIMITER ;
 
-UPDATE discount_card
-SET summ = NULL;
+-- UPDATE discount_card
+-- SET summ = NULL;
 -- WHERE discount_card.id = 1;
 
 truncate clients;
